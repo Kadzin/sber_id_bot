@@ -7,13 +7,16 @@ import {CardActionArea, IconButton, tableCellClasses, TextField} from '@mui/mate
 import {groupsAPI} from "../../services/GroupService";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {styled} from "@mui/material/styles";
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import {IGroups} from "../../models/IGroups";
 import TransferList from "../../components/UI/TransferList/TransferList";
 import Button from "../../components/UI/Button/Button";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
