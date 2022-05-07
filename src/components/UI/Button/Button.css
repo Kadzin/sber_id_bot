@@ -1,0 +1,44 @@
+.button {
+    min-width: 100px;
+    width: auto;
+    height: 32px;
+
+    border: none;
+    border-radius: 25px;
+
+    font-family: Arial;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+.button_theme_red {
+    background: #df4040;
+}
+.button_theme_green {
+    background: #21a038;
+}
+.right {
+    position: absolute;
+    left: calc(50% + 600px);
+    top: 50%;
+    transform: translate(-100%, -50%);
+}
+.left {
+    position: relative;
+    margin: 0 0 25px 0;
+}
+.center {
+    position: relative;
+    margin: 25px 0 25px 50%;
+    transform: translate(-50%, 0);
+}
+.tile {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.disabled {
+    background-color: #cecece;
+    cursor: not-allowed;
+}

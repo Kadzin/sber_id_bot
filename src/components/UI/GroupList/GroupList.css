@@ -1,0 +1,11 @@
+.groupsList {
+    font-family: Arial;
+    font-size: 14px;
+    color: #303844;
+    width: 30%;
+    height: 40px;
+    padding: 8px;
+    margin: 0 70% 25px 0;
+    border-radius: 0;
+    outline: unset;
+}
