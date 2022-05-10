@@ -28,6 +28,15 @@ export const groupsAPI = createApi({
                 }
             }),
         }),
+        checkCookie: build.mutation<IGroupsUpdateResponse, string>({
+            query: (cookie) => ({
+                url: 'auth.php',
+                method: 'POST',
+                body: {
+                    cookie: cookie
+                }
+            }),
+        }),
         setGroupInfo: build.mutation<IGroupsUpdateResponse, IGroupsUpdate>({
             query: (params) => ({
                 url: 'updateGroups.php',
