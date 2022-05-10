@@ -51,15 +51,16 @@ const NavBar = () => {
         }
     }
 
+
     return (
             <div className="nav_bar">
-                <Link to={"/send"}>
+                <Link to="/send">
                     <NavItem callback={handleClick} page="/send" type={active.page_1} text="Отправить сообщение"/>
                 </Link>
-                <Link to={"/groups"}>
+                <Link to="/groups">
                     <NavItem callback={handleClick} page="/groups" type={active.page_2} text="Группы и Чаты"/>
                 </Link>
-                <Link to={"/users"}>
+                <Link to="/users">
                     <NavItem callback={handleClick} page="/users" type={active.page_3} text="Пользователи"/>
                 </Link>
             </div>

@@ -5,6 +5,8 @@ import {IGroupsUpdateResponse} from "../models/IGroupsUpdateReponse";
 import {IGroupCreate} from "../models/IGroupCreate";
 import {ISendMessage} from "../models/ISendMessage";
 import {IUsers} from "../models/IUsers";
+import {ILogin} from "../models/ILogin";
+import {ILoginResponse} from "../models/ILoginResponse";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
@@ -82,6 +84,25 @@ export const groupsAPI = createApi({
                 }
             }),
             invalidatesTags: result => ['Group']
+        }),
+        login: build.mutation<ILoginResponse, ILogin>({
+            query: (params) => ({
+                url: 'login.php',
+                method: 'POST',
+                body: {
+                    login: params.id,
+                    pass: params.pass
+                }
+            })
+        }),
+        logout: build.mutation<IGroupsUpdateResponse, string>({
+            query: (params) => ({
+                url: 'logout.php',
+                method: 'POST',
+                body: {
+                    cookie: params
+                }
+            })
         })
     })
 })

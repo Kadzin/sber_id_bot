@@ -1,12 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../pages.css'
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {FormControl, IconButton, Input, InputAdornment, InputLabel, TextField} from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import TransferList from "../../components/UI/TransferList/TransferList";
+import {TextField} from "@mui/material";
 import Button from "../../components/UI/Button/Button";
 import Modal from "@mui/material/Modal";
+import {groupsAPI} from "../../services/GroupService";
+
+
+function setCookie(cname: string, cvalue: string, exdays: number) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
 const LoginPage = () => {
 
@@ -27,6 +34,31 @@ const LoginPage = () => {
 
     const [id, setId] = useState<string>('')
     const [pass, setPass] = useState<string>('')
+
+    const [loginRequest, {data: loginResponse}] = groupsAPI.useLoginMutation()
+    const login = async () => {
+        await loginRequest({
+            id: id,
+            pass: pass
+        })
+    }
+    useEffect(() => {
+        if(loginResponse) {
+            switch (loginResponse.status) {
+                case 'true':
+                    setCookie('btsc', loginResponse.cookie, 365)
+                    document.location.reload()
+                    break;
+                case 'false':
+                    alert('Неправильный логин или пароль')
+                    break;
+                default:
+                    console.log(loginResponse.status)
+                    break;
+            }
+        }
+    }, [loginResponse])
+
 
     return (
         <>
@@ -96,6 +128,7 @@ const LoginPage = () => {
                             marginTop: "20px",
                             marginBottom: "10px"
                         }}
+                        onClick={login}
                     />
                 </Box>
             </Modal>

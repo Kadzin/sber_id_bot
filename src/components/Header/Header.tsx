@@ -7,6 +7,8 @@ import "./Header.module.css";
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Button from "../UI/Button/Button";
+import {groupsAPI} from "../../services/GroupService";
+import {useEffect} from "react";
 
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -17,8 +19,30 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     },
 }));
 
+
+
+
 const Header = () => {
 
+    const cookies = document.cookie.split("; ").map(c => {
+        return {name: c.split("=")[0], value: c.split("=")[1]}
+    })
+    const cookie = cookies.filter(c => c.name == 'btsc')
+
+    const [logoutRequest, {data: logoutResponse}] = groupsAPI.useLogoutMutation()
+    const logout = () => {
+        if(cookie.length != 0) {
+            logoutRequest(cookie[0].value)
+        } else {
+            document.location.reload()
+        }
+    }
+    useEffect(() => {
+        if(logoutResponse && logoutResponse.response == 'true') {
+            document.cookie = "btsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.location.reload()
+        }
+    }, [logoutResponse])
 
     return (
         <AppBar position="static" sx={{
@@ -43,7 +67,7 @@ const Header = () => {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Button disabled={false} align="" theme="button_theme_red" value="Выход" />
+                            <Button disabled={false} align="" theme="button_theme_red" value="Выход" onClick={logout} />
                         </Grid>
                     </Grid>
                 </StyledToolbar>

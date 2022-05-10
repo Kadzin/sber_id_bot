@@ -16,12 +16,13 @@ import {setupStore} from "./store/store";
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+const host = "https://nse-work.ru/test/build/"
 
 const store = setupStore()
 
 root.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename="/test/build/">
             <Routes>
                 <Route path="/" element={<App />}>
                     <Route index element={<SendPage />} />
