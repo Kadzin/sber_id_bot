@@ -3,7 +3,7 @@ import '../pages.css'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import {CardActionArea, IconButton, tableCellClasses, TextField} from '@mui/material';
+import {Alert, CardActionArea, IconButton, Snackbar, tableCellClasses, TextField} from '@mui/material';
 import {groupsAPI} from "../../services/GroupService";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -134,6 +134,7 @@ const GroupsPage = () => {
     * Sending group's update to server (token: string; group_id: string; chats: string[]
     * Getting update status as response (response: string)
     * */
+    const [alertSuccess, setAlertSuccess] = useState(false)
     const [updateGroup, {data: postResponse}] = groupsAPI.useSetGroupInfoMutation()
     const updateGroupInfo = async () => {
         await updateGroup({
@@ -143,9 +144,16 @@ const GroupsPage = () => {
     }
     useEffect(() => {
         if(postResponse && postResponse.response == "Update success") {
-            alert("Изменения успешно сохранены")
+            setAlertSuccess(true)
         }
     }, [postResponse])
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setAlertSuccess(false);
+    };
 
     const [newGroupName, setNewGroupName] = useState('')
     const [newGroupNameError, setNewGroupNameError] = useState(false)
@@ -298,13 +306,16 @@ const GroupsPage = () => {
                             }}>
                                 {popupGroup.name}
                             </Typography>
-                            <IconButton onClick={() => removeGroup(popupGroup.id)}>
+                            {popupGroup.id != '10000001' &&
+                                <IconButton onClick={() => removeGroup(popupGroup.id)}>
                                 <DeleteForeverIcon sx={{
                                     color: "#d01515",
                                     fontSize: "28px",
                                     margin: "0"
-                                }} />
+                                }}/>
                             </IconButton>
+
+                            }
                         </div>
                         <TransferList groups={popupGroup} update={updateLeftChats} />
                         <Button disabled={false} align="center" theme="button_theme_green" value="Сохранить" style={{
@@ -362,6 +373,16 @@ const GroupsPage = () => {
                     </Box>
                 </Modal>
             </div>
+            <Snackbar
+                open={alertSuccess}
+                autoHideDuration={1000}
+                onClose={handleCloseAlert}
+                anchorOrigin={{horizontal: "left", vertical: "top"}}
+            >
+                <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                    Изменения успешно сохранены
+                </Alert>
+            </Snackbar>
         </>
     );
 };

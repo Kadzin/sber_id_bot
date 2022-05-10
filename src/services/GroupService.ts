@@ -3,6 +3,8 @@ import {IGroups} from "../models/IGroups";
 import {IGroupsUpdate} from "../models/IGroupsUpdate";
 import {IGroupsUpdateResponse} from "../models/IGroupsUpdateReponse";
 import {IGroupCreate} from "../models/IGroupCreate";
+import {ISendMessage} from "../models/ISendMessage";
+import {IUsers} from "../models/IUsers";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
@@ -17,6 +19,14 @@ export const groupsAPI = createApi({
                 }
             }),
             providesTags: result => ['Group']
+        }),
+        fetchUsers: build.query<IUsers[], ''>({
+            query: () => ({
+                url: 'getUsers.php',
+                params: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                }
+            }),
         }),
         setGroupInfo: build.mutation<IGroupsUpdateResponse, IGroupsUpdate>({
             query: (params) => ({
@@ -52,6 +62,17 @@ export const groupsAPI = createApi({
                 }
             }),
             invalidatesTags: result => ['Group']
+        }),
+        sendMessage: build.mutation<IGroupsUpdateResponse, ISendMessage>({
+            query: (params) => ({
+                url: 'sendMessage.php',
+                method: 'POST',
+                body: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    gid: params.id,
+                    message: params.message
+                }
+            })
         })
     })
 })
