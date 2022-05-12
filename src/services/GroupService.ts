@@ -10,7 +10,7 @@ import {ILoginResponse} from "../models/ILoginResponse";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/SberID/bot/web/API/'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
