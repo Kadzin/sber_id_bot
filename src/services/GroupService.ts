@@ -7,10 +7,16 @@ import {ISendMessage} from "../models/ISendMessage";
 import {IUsers} from "../models/IUsers";
 import {ILogin} from "../models/ILogin";
 import {ILoginResponse} from "../models/ILoginResponse";
+import {IMessage} from "../models/IMessage";
+import {IDeleteMessage} from "../models/IDeleteMessage";
+
+// dev host: https://nse-work.ru/test/build/API
+// prod host: https://nse-work.ru/SberID/bot/web/API/
+
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/SberID/bot/web/API/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
@@ -39,6 +45,15 @@ export const groupsAPI = createApi({
                 }
             })
         }),
+        getMessages: build.query<IMessage[], ''>({
+            query: () => ({
+                url: 'getMessages.php',
+                params: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                }
+            }),
+            providesTags: result => ['Group']
+        }),
         sendMessage: build.mutation<IGroupsUpdateResponse, ISendMessage>({
             query: (params) => ({
                 url: 'sendMessage.php',
@@ -48,7 +63,44 @@ export const groupsAPI = createApi({
                     gid: params.id,
                     message: params.message
                 }
-            })
+            }),
+            invalidatesTags: result => ['Group']
+        }),
+        updateMessage: build.mutation<IGroupsUpdateResponse, ISendMessage>({
+            query: (params) => ({
+                url: 'updateMessage.php',
+                method: 'POST',
+                body: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    message_id: params.id,
+                    message: params.message
+                }
+            }),
+            invalidatesTags: result => ['Group']
+        }),
+        deleteMessage: build.mutation<IGroupsUpdateResponse, string>({
+            query: (params) => ({
+                url: 'deleteMessage.php',
+                method: 'POST',
+                body: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    message_id: params
+                }
+            }),
+            invalidatesTags: result => ['Group']
+        }),
+        deleteMessageFromChat: build.mutation<IGroupsUpdateResponse, IDeleteMessage>({
+            query: (params) => ({
+                url: 'deleteMessageFromChat.php',
+                method: 'POST',
+                body: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    chat_id: params.chat_id,
+                    message_id: params.message_id,
+                    parent_message_id: params.parent_message_id
+                }
+            }),
+            invalidatesTags: result => ['Group']
         }),
         setGroupInfo: build.mutation<IGroupsUpdateResponse, IGroupsUpdate>({
             query: (params) => ({

@@ -17,7 +17,8 @@
     margin: 0;
     padding: 0 0 2px 0;
     cursor: pointer;
-    border-bottom: 1px solid #000;
+    border-bottom: none;
+
     display: inline-block;
     color: #000000;
 
@@ -25,9 +26,9 @@
     font-size: 18px;
 }
 .nav_item p:hover {
-    border-bottom: unset;
+    border-bottom: 1px solid #000;
 }
 .nav_item p.active {
     color: #21a038;
-    border-bottom: none !important;
+    border-bottom: 1px solid #21a038;
 }

@@ -5,7 +5,7 @@ interface ButtonProps {
     callBackData?: string;
     onClick?: any;
     disabled: boolean;
-    align: string;
+    align?: string;
     theme: string;
     value: string;
     style?: CSSProperties

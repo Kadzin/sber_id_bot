@@ -7,25 +7,60 @@ import {
     convertToRaw,
     DraftHandleValue,
     ContentState,
-    RawDraftContentState
+    RawDraftContentState, convertFromHTML
 } from 'draft-js'
 import 'draft-js/dist/Draft.css'
+import Button from "../Button/Button";
 
 interface TextareaProps {
-    onChange: any
+    onChange: any,
+    width?: string,
+    initContent?: string
+    saveChanges?: any
 }
 
 const Textarea:FC<TextareaProps> = (props) => {
 
+    const [initalText, setInitalText] = useState(props.initContent)
+
+    const [saveButton, setSaveButton] = useState(false)
+    const [isChangesSaved, setIsChangesSaved] = useState(false)
+
     const [formatedText, setFormatedText] = useState('')
     const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
+        () => {
+            if(initalText) {
+                setSaveButton(true)
+                const initialContent = initalText.replace(/\n/g, "<br />");
+                const HTML2DraftJS = convertFromHTML(initialContent)
+                return EditorState.createWithContent(ContentState.createFromBlockArray(HTML2DraftJS.contentBlocks, HTML2DraftJS.entityMap))
+            } else {
+                return EditorState.createEmpty()
+            }
+        },
     )
 
+    const sendChangesBack = () => {
+        setIsChangesSaved(true)
+    }
+    useEffect(() => {
+        if(isChangesSaved) {
+            props.saveChanges(isChangesSaved)
+            setInitalText(formatedText)
+            setIsChangesSaved(false)
+        }
+    }, [isChangesSaved])
 
     useEffect(() => {
         props.onChange(formatedText)
-    }, [formatedText])
+        if(initalText) {
+            if(formatedText.trim() != initalText.trim()) {
+                setSaveButton(false)
+            } else {
+                setSaveButton(true)
+            }
+        }
+    }, [formatedText, initalText])
 
     useEffect(() => {
         convertText(convertToRaw(editorState.getCurrentContent()))
@@ -126,13 +161,27 @@ const Textarea:FC<TextareaProps> = (props) => {
 
     return (
         <>
-            <div className="ta_message">
+            <div className="ta_message" style={{ width: props.width }}>
                 <div className="textarea_buttons">
                     <button onClick={onBoldClick}><b>B</b></button>
                     <button onClick={onItalicClick}><em>I</em></button>
                     <button onClick={onUnderlineClick}><u>U</u></button>
                     {/*<button onClick={onPlainClick}>Row</button>*/}
                 </div>
+                {initalText && <Button
+                    disabled={saveButton}
+                    theme='button_theme_green'
+                    value='Save changes'
+                    style={{
+                        position: 'absolute',
+                        bottom: '25px',
+                        right: '25px',
+                        padding: '0 16px',
+                        cursor: 'pointer',
+                        zIndex: '2'
+                    }}
+                    onClick={sendChangesBack}
+                />}
                 <Editor
                     editorState={editorState}
                     onChange={textContent}

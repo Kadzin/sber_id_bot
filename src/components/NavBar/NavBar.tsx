@@ -9,7 +9,8 @@ const NavBar = () => {
     const [active, setActive] = useState({
         page_1: 'active',
         page_2: '',
-        page_3: ''
+        page_3: '',
+        page_4: ''
     })
     let location = useLocation()
 
@@ -24,28 +25,40 @@ const NavBar = () => {
                 setActive({
                     page_1: 'active',
                     page_2: '',
-                    page_3: ''
+                    page_3: '',
+                    page_4: ''
                 })
                 break;
             case '/groups':
                 setActive({
                     page_1: '',
                     page_2: 'active',
-                    page_3: ''
+                    page_3: '',
+                    page_4: ''
                 })
                 break;
             case '/users':
                 setActive({
                     page_1: '',
                     page_2: '',
-                    page_3: 'active'
+                    page_3: 'active',
+                    page_4: ''
+                })
+                break;
+            case '/messages':
+                setActive({
+                    page_1: '',
+                    page_2: '',
+                    page_3: '',
+                    page_4: 'active'
                 })
                 break;
             default:
                 setActive({
                     page_1: 'active',
                     page_2: '',
-                    page_3: ''
+                    page_3: '',
+                    page_4: ''
                 })
                 break;
         }
@@ -62,6 +75,9 @@ const NavBar = () => {
                 </Link>
                 <Link to="/users">
                     <NavItem callback={handleClick} page="/users" type={active.page_3} text="Пользователи"/>
+                </Link>
+                <Link to="/messages">
+                    <NavItem callback={handleClick} page="/messages" type={active.page_4} text="Сообщения"/>
                 </Link>
             </div>
     );

@@ -56,16 +56,6 @@ function App() {
             </Box>
         </>
     );
-
-    /*if(!isAuthed) {
-        return (
-            <>
-                <LoginPage/>
-            </>
-        );
-    } else {
-
-    }*/
 }
 
 export default App;
