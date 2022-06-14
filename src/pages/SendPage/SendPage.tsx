@@ -43,6 +43,11 @@ const SendPage = () => {
     useEffect(() => {
         if(sendMessageResponse && sendMessageResponse.response == "Success") {
             setAlertSuccess(true)
+            setSendData({
+                formatedText: '',
+                groupID: '',
+                buttonActive: true
+            })
         }
     }, [sendMessageResponse])
 

@@ -104,9 +104,8 @@ const MessagesPage = () => {
                 message.pinned == '1' ? pinned = true : pinned = false
 
                 return (
-                    <>
+                    <div key={message.id}>
                         <ExpandableCard
-                            key={message.id}
                             id={message.id}
                             groupName={message.group_name}
                             date={message.date}
@@ -132,7 +131,7 @@ const MessagesPage = () => {
                                 {alertMessage}
                             </Alert>
                         </Snackbar>
-                    </>
+                    </div>
                     )
                 }
             )}

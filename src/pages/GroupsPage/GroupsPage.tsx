@@ -158,7 +158,7 @@ const GroupsPage = () => {
     const [newGroupName, setNewGroupName] = useState('')
     const [newGroupNameError, setNewGroupNameError] = useState(false)
     const checkNewGroupName = (name: string) => {
-        if(name.length > 55 || name.length < 0) {
+        if(name.length > 40 || name.length < 0) {
             setNewGroupNameError(true)
             setNewGroupName('')
         } else {
@@ -226,7 +226,8 @@ const GroupsPage = () => {
                             boxSizing: "border-box"
                         }}>
                             <Typography gutterBottom variant="h5" component="div" textAlign="center" sx={{
-                                color: "#666666"
+                                color: "#666666",
+                                fontSize: "1.4rem"
                             }}>
                                 {group.name}
                             </Typography>
@@ -349,7 +350,7 @@ const GroupsPage = () => {
                                 required
                                 error={newGroupNameError}
                                 id="standard-required"
-                                label="Не более 55 символов"
+                                label="Не более 40 символов"
                                 defaultValue=""
                                 placeholder="New group"
                                 variant="standard"

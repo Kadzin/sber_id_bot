@@ -9,8 +9,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import {IGroups} from "../../../models/IGroups";
+import ClearIcon from '@mui/icons-material/Clear';
 
 function not(a: readonly number[], b: readonly number[]) {
     return a.filter((value) => b.indexOf(value) === -1);
@@ -34,6 +35,16 @@ interface chatsInitial {
 }
 
 const TransferList:FC<TransferListProps> = (props) => {
+
+    const [searchableListValueLeft, setSearchableListValueLeft] = useState('')
+    const [searchableListValueRight, setSearchableListValueRight] = useState('')
+    const searchableList = (value: string, list: string = 'left') => {
+        if(list == 'left') {
+            setSearchableListValueLeft(value)
+        } else if (list == 'right') {
+            setSearchableListValueRight(value)
+        }
+    }
 
     const group = props.groups
     const allChats = group.chats.concat(group.otherChats)
@@ -108,7 +119,32 @@ const TransferList:FC<TransferListProps> = (props) => {
         setChecked(not(checked, rightChecked));
     };
 
-    const customList = (title: React.ReactNode, items: readonly number[]) => (
+    const searchInput = (list: string) => {
+        let value
+        if(list == 'left') {
+            value = searchableListValueLeft
+        } else {
+            value = searchableListValueRight
+        }
+
+        return (
+            <input
+                style={{
+                    width: '100%',
+                    margin: '0',
+                    padding: '16px',
+                    boxSizing: 'border-box',
+                    border: 'none',
+                    outlineWidth: '1px'
+                }}
+                value={value}
+                onInput={(e) => searchableList(e.currentTarget.value, list)}
+                placeholder='Найти чат'
+            />
+        )
+    }
+
+    const customList = (title: React.ReactNode, items: readonly number[], list: string) => (
         <Card sx={{
             backgroundColor: "#efefef"
         }}>
@@ -131,6 +167,28 @@ const TransferList:FC<TransferListProps> = (props) => {
                 subheader={`${numberOfChecked(items)}/${items.length} selected`}
             />
             <Divider />
+            <div
+                style={{
+                    position: 'relative'
+                }}
+            >
+                {searchInput(list)}
+                <ClearIcon
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: '8px',
+                        transform: 'translate(0, -50%)',
+                        width: '24px',
+                        height: '24px',
+                        color: '#fe4565',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => searchableList('', list)}
+                />
+            </div>
+
+            <Divider />
             <List
                 sx={{
                     width: 300,
@@ -143,7 +201,19 @@ const TransferList:FC<TransferListProps> = (props) => {
                 role="list"
             >
                 {items.map((value: number) => {
-                    const labelId = `transfer-list-all-item-${value}-label`;
+                    const labelId = `transfer-list-all-item-${value}-label`
+
+                    let allChatsValue2LowerString = allChats[value].name.toLowerCase()
+                    let currentSearch2LowerString
+                    if(list == 'left') {
+                        currentSearch2LowerString = searchableListValueLeft.toLowerCase()
+                    } else {
+                        currentSearch2LowerString = searchableListValueRight.toLowerCase()
+                    }
+
+                    if(!allChatsValue2LowerString.includes(currentSearch2LowerString)) {
+                        return false;
+                    }
 
                     return (
                         <ListItem
@@ -178,7 +248,7 @@ const TransferList:FC<TransferListProps> = (props) => {
             <Grid item sx={{
                 paddingRight: "8px"
             }}>
-                {customList('Чаты в группе', left)}
+                {customList('Чаты в группе', left, 'left')}
             </Grid>
             <Grid item sx={{
                 paddingRight: "8px"
@@ -209,7 +279,7 @@ const TransferList:FC<TransferListProps> = (props) => {
             <Grid item sx={{
                 paddingRight: "8px"
             }}>
-                {customList('Остальные чаты', right)}
+                {customList('Остальные чаты', right, 'right')}
             </Grid>
         </Grid>
     );
