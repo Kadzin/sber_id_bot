@@ -8,9 +8,13 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Textarea from "../Textarea/Textarea";
-import EditIcon from '@mui/icons-material/Edit';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import Button from "@mui/material/Button";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreContexMenu from "./MoreContexMenu/MoreContexMenu";
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -41,7 +45,9 @@ interface ExpandableCardProps {
     }[],
     updateMessageCallback: any,
     deleteMessageCallback: any,
-    deleteChatMessageCallback: any
+    deleteChatMessageCallback: any,
+    pinMessageCallback: any,
+    unpinMessageCallback: any
 }
 
 
@@ -74,12 +80,46 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
         }
     }, [saveChanges])
 
-    const deleteMessage = () => {
-        props.deleteMessageCallback(props.id)
+    const mainContextMenuCallback = (option: string) => {
+        switch (option) {
+            case 'Удалить':
+                if(window.confirm("Вы действительно хотите удалить рассылку? \nОтменить это будет невозможно")) {
+                    props.deleteMessageCallback(props.id)
+                } else {
+                    break;
+                }
+                break;
+            case 'Закрепить все':
+                props.pinMessageCallback(props.id, 'all', '')
+                break;
+            case 'Открепить все':
+                props.unpinMessageCallback(props.id, 'all', '')
+                break;
+            default:
+                break;
+        }
     }
-    const deleteChatMessage = (chat_id: string, message_id: string) => {
-        props.deleteChatMessageCallback(props.id, chat_id, message_id)
+
+    const chatsContextMenuCallback = (option: string, chat_id: string, message_id: string) => {
+        switch (option) {
+            case 'Удалить':
+                if(window.confirm("Вы действительно хотите удалить рассылку из данного чата? \nОтменить это будет невозможно")) {
+                    props.deleteChatMessageCallback(props.id, chat_id, message_id)
+                } else {
+                    break;
+                }
+                break;
+            case 'Закрепить':
+                props.pinMessageCallback(props.id, chat_id, '')
+                break;
+            case 'Открепить':
+                props.unpinMessageCallback(props.id, chat_id, '')
+                break;
+            default:
+                break;
+        }
     }
+
 
     return (
         <Card sx={{ width: '100%', position: 'relative', margin: '25px 0', backgroundColor: '#fafafc'}}>
@@ -87,6 +127,18 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
                 display: 'flex',
                 justifyContent: 'space-between'
             }}>
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '65px',
+                    }}
+                >
+                    <MoreContexMenu
+                        callbackFunc={mainContextMenuCallback}
+                        options={['Удалить', 'Закрепить все', 'Открепить все']}
+                    />
+                </div>
                 <CardContent>
                     <Typography>
                         ID: {props.id}
@@ -133,28 +185,22 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
                         width: '95%'
                     }}>
                         <Typography paragraph>Текст сообщения рассылки:</Typography>
-                        <div style={{
-
-                        }}>
-                            <PushPinIcon sx={{
-                                color: '#0048ff'
-                            }} />
-                            <DoDisturbIcon
-                                sx={{
-                                    color: '#ff0000',
-                                    cursor: 'pointer'
-                                }}
-                                onClick={deleteMessage}
-                            />
-                        </div>
                     </div>
-                    <Textarea width='95%' onChange={setFromatedText} initContent={props.messageText} saveChanges={saveChangesUpdate} />
+                    <Textarea
+                        width='95%'
+                        onChange={setFromatedText}
+                        initContent={props.messageText}
+                        saveChanges={saveChangesUpdate}
+                    />
                     {props.chatMessages.map((item) => {
-                        let pinColor = '';
+                        let pinText = '';
+                        let chatNameDecoration = '';
                         if(item.pinned == '0') {
-                            pinColor = '#dedede'
+                            chatNameDecoration = 'unset'
+                            pinText = 'Закрепить'
                         } else {
-                            pinColor = '#0048ff'
+                            chatNameDecoration = '#dedede'
+                            pinText = 'Открепить'
                         }
                         if(item.chat_id == '0') {
                             return(
@@ -162,7 +208,7 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
                                     key='1234567890'
                                     style={{
                                         display: 'flex',
-                                        alignItems: 'baseline',
+                                        alignItems: 'center',
                                         width: '95%'
                                     }}
                                 >
@@ -178,26 +224,21 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
                                 key={item.chat_id}
                                 style={{
                                     display: 'flex',
-                                    alignItems: 'baseline',
+                                    alignItems: 'center',
                                     width: '95%'
                                 }}
                             >
+
                                 <p style={{
                                     margin: '0 25px 0 3px',
-                                    width: '250px'
+                                    width: 'auto',
+                                    backgroundColor: chatNameDecoration
                                 }}>{item.chat_name}</p>
-                                <PushPinIcon sx={{
-                                    color: pinColor,
-                                    margin: '0 10px',
-                                    cursor: 'pointer'
-                                }} />
-                                <DoDisturbIcon
-                                    sx={{
-                                        color: '#ff0000',
-                                        margin: '0 10px',
-                                        cursor: 'pointer'
-                                    }}
-                                    onClick={() => deleteChatMessage(item.chat_id, item.message_id)}
+                                <MoreContexMenu
+                                    callbackFunc={chatsContextMenuCallback}
+                                    options={['Удалить', pinText]}
+                                    chat_id={item.chat_id}
+                                    message_id={item.message_id}
                                 />
                             </div>
                         )

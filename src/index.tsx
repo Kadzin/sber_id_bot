@@ -25,7 +25,7 @@ const store = setupStore()
 
 root.render(
     <Provider store={store}>
-        <BrowserRouter basename="/test/build/">
+        <BrowserRouter basename="/SberID/bot/web/">
             <Routes>
                 <Route path="/" element={<App />}>
                     <Route index element={<SendPage />} />
