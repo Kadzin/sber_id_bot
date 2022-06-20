@@ -11,17 +11,17 @@
     float: left;
     outline: unset;
     resize: none;
-    border: 1px solid #858585;
-    border-radius: 10px 10px 0 0;
+    border: 1px solid #ced1d5;
+    border-radius: 10px;
 }
 .textarea_buttons {
-    position: relative;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 8px 16px;
-    box-sizing: border-box;
-    border-bottom: 1px solid #858585;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9;
+}
+.textarea_buttons > * {
+    margin: 0 5px;
 }
 .textarea_buttons button {
     margin-right: 10px;
@@ -35,7 +35,7 @@ div.DraftEditor-root {
     min-height: 200px;
     height: auto;
     margin: 0;
-    padding: 8px 16px;
+    padding: 16px;
     box-sizing: border-box;
     float: left;
     outline: unset;

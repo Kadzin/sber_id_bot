@@ -138,6 +138,7 @@ const SendPage = () => {
         })
     }
 
+
     const [chats2Send, setChats2Send] = useState<any[] | null>()
     useEffect(() => {
         if(sendData.formatedText.trim() != '' && chats2Send?.length && chats2Send.length != 0) {
@@ -148,8 +149,10 @@ const SendPage = () => {
     }, [chats2Send])
 
 
-
     const addressContent = () => {
+        if(!groups || !chats) {
+            return false
+        }
         switch (alignment) {
             case 'group':
                 return (
@@ -161,7 +164,7 @@ const SendPage = () => {
                     <>
                         <Autocomplete
                             multiple
-                            id="tags-standard"
+                            id="chats"
                             options={chats}
                             getOptionLabel={(option) => option.label}
                             renderInput={(params) => (
@@ -186,12 +189,14 @@ const SendPage = () => {
                 break
         }
     }
+    const toggleButtonTheme = {
+        fontSize: '12px',
+        padding: '8px 25px'
+    }
 
     return (
         <>
-            <p className="title">Отправить сообщение</p>
             <Textarea onChange={setFromatedText} />
-
             <p className="subtitle">Выберете способ отправки рассылки:</p>
             <ToggleButtonGroup
                 color="standard"
@@ -203,17 +208,10 @@ const SendPage = () => {
                     margin: '0 0 25px 0'
                 }}
             >
-                <ToggleButton value="group">В группу</ToggleButton>
-                <ToggleButton value="chat">Адресно</ToggleButton>
+                <ToggleButton value="group" sx={toggleButtonTheme}>В группу</ToggleButton>
+                <ToggleButton value="chat" sx={toggleButtonTheme}>Адресно</ToggleButton>
             </ToggleButtonGroup>
-            <div
-                // style={{
-                //     border: '1px solid grey',
-                //     float: 'left',
-                //     width: '100%',
-                //     height: '400px'
-                // }}
-            >
+            <div>
                 {addressContent()}
             </div>
             <Button

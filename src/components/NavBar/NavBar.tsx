@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import NavItem from "./NavItem/NavItem";
 import {Link, useLocation} from "react-router-dom";
+import './NavBar.css'
 
 
 

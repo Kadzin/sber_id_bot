@@ -59,6 +59,11 @@ const LoginPage = () => {
         }
     }, [loginResponse])
 
+    document.addEventListener('keypress', (event) => {
+        if(event.key == 'Enter') {
+            login()
+        }
+    });
 
     return (
         <>

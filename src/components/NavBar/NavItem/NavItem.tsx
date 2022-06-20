@@ -18,8 +18,8 @@ const NavItem:FC<NavItemProps> = (props) => {
     }
 
     return (
-        <div onClick={togglePage} className="nav_item">
-            <p className={props.type}>{props.text}</p>
+        <div onClick={togglePage} className={props.type + " nav_item"}>
+            <p>{props.text}</p>
         </div>
     );
 };

@@ -17,7 +17,7 @@ import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/SberID/bot/web/API/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
@@ -43,6 +43,15 @@ export const groupsAPI = createApi({
                 url: 'getUsers.php',
                 params: {
                     token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                }
+            })
+        }),
+        getUser: build.query<IUsers, string>({
+            query: (cookie) => ({
+                url: 'getUser.php',
+                params: {
+                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    cookie: cookie
                 }
             })
         }),

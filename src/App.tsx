@@ -5,13 +5,14 @@ import Box from '@mui/material/Box';
 import NavBar from "./components/NavBar/NavBar";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import {groupsAPI} from "./services/GroupService";
+import {Backdrop, CircularProgress} from "@mui/material";
 
 function App() {
 
     const [isAuthed, setIsAuthed] = useState(false)
 
 
-    const [checkCookie, {data: checkCookieResponse}] = groupsAPI.useCheckCookieMutation()
+    const [checkCookie, {data: checkCookieResponse, isLoading: cookieLoading}] = groupsAPI.useCheckCookieMutation()
 
     const cookies = document.cookie.split("; ").map(c => {
         return {name: c.split("=")[0], value: c.split("=")[1]}
@@ -34,6 +35,18 @@ function App() {
         }
     }, [checkCookieResponse])
 
+
+
+    if(cookieLoading) {
+        return (
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0, 0, 0, .2)' }}
+                open={true}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        )
+    }
 
     if(!isAuthed) {
         return (

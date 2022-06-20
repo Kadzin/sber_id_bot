@@ -11,6 +11,9 @@ import {
 } from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import Button from "../Button/Button";
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
 
 interface TextareaProps {
     onChange: any,
@@ -163,9 +166,12 @@ const Textarea:FC<TextareaProps> = (props) => {
         <>
             <div className="ta_message" style={{ width: props.width }}>
                 <div className="textarea_buttons">
-                    <button onClick={onBoldClick}><b>B</b></button>
-                    <button onClick={onItalicClick}><em>I</em></button>
-                    <button onClick={onUnderlineClick}><u>U</u></button>
+                    <FormatBoldIcon onClick={onBoldClick} sx={{cursor: 'pointer'}} />
+                    <FormatItalicIcon onClick={onItalicClick} sx={{cursor: 'pointer'}} />
+                    <FormatUnderlinedIcon onClick={onUnderlineClick} sx={{cursor: 'pointer'}} />
+                    {/*<button onClick={onBoldClick}><b>B</b></button>*/}
+                    {/*<button onClick={onItalicClick}><em>I</em></button>*/}
+                    {/*<button onClick={onUnderlineClick}><u>U</u></button>*/}
                     {/*<button onClick={onPlainClick}>Row</button>*/}
                 </div>
                 {initalText && <Button
@@ -174,8 +180,8 @@ const Textarea:FC<TextareaProps> = (props) => {
                     value='Save changes'
                     style={{
                         position: 'absolute',
-                        bottom: '25px',
-                        right: '25px',
+                        bottom: '16px',
+                        right: '16px',
                         padding: '0 16px',
                         cursor: 'pointer',
                         zIndex: '2'
@@ -186,6 +192,7 @@ const Textarea:FC<TextareaProps> = (props) => {
                     editorState={editorState}
                     onChange={textContent}
                     handleKeyCommand={handleKeyCommand}
+                    placeholder='Сообщение'
                 />
             </div>
         </>
