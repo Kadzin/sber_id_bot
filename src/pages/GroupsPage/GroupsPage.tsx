@@ -59,7 +59,6 @@ const GroupsPage = () => {
         return `linear-gradient(${direction}deg, rgba(${r1},${g1},${b1},1), rgba(${r1},${g1},${b1},.2))`
     }
 
-
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
