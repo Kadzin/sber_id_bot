@@ -1,46 +1,46 @@
-# Getting Started with Create React App
+# Сбер ID. B2B team bot for telegram
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Что это?
 
-## Available Scripts
+**Если просто, то этот проект —** _простой веб интерфейс для работы с большим количеством чатов в телеграме._
 
-In the project directory, you can run:
+Ввиду специфики работы отдела b2b Сбер ID ежедневная работа сопровождается общением с партнёрами в огромном количестве чатов в телеграме.
 
-### `npm start`
+Для упрощения данной работы было решено использовать бота телеграм, что позволило оптимизировать время работы, а также сильно упростить поиск информации в отправленных коммуникациях и сократить количество ошибок при общении с партнёрами.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Что умеет этот чатбот?
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Бот представляет собой надстройку в виде веб-интерфейса и работает на стандартном [API телеграма](https://core.telegram.org/bots/api) 
 
-### `npm test`
+Регистрация в системе происходит также через телеграм.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Актуальная версия v1.2 содержит в себе следующий функционал:
+- Команда `/contacts` в телеграм — _Отправляет в чат актуальные контакты b2b команды_;
+- Автоматическое добавление чата в базу, если бот добавлен в чат (аналогично, если бота убрали из чата);
+- Создание групп с любым набором чатов в ней;
+- Отправка сообщения в созданную группу или адресно в чат(ы);
+- История сообщений:
+  - Удалить произведённую рассылку
+  - Отредактировать сообщение
+  - Удалить сообщение из определённого чата в рассылке
+  - Закрепить/Открепить сообщение во всех или в конкретных чатах
 
-### `npm run build`
+## API
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Для работы данного проекта было также реализовано небольшое API для работы с базой и взаимодействия с API телеграм.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+API написано на php. В качестве СУБД используется mySQL
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Changelog
 
-### `npm run eject`
+| Версия | Дата       | Изменения |
+| ------ |------------| --------- |
+|  v1.0  | 30.01.2022 | Создан чатбот и прототип веб-интерфейса |
+| v1.1 | 13.05.2022 | Веб-интерфейс переделан на React |
+| v1.2 | 21.06.2022 | Переделан дизайн. Добавлены: <ul><li>Адерсная отправка</li><li>История сообщений</li><li>Удаление/Редактирование/Закрепление сообщений</li></ul>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Копирайт
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Автор: Нюсхаев Сергей
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+2022
