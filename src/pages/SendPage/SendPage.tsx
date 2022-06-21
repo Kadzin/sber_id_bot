@@ -13,6 +13,8 @@ import {
     ToggleButton,
     ToggleButtonGroup
 } from "@mui/material";
+import ChatsAutocomplete from "./Autocomplete/ChatsAutocomplete";
+import GroupsAutocomplete from "./Autocomplete/GroupsAutocomplete";
 
 interface chats {
     label: string,
@@ -115,83 +117,104 @@ const SendPage = () => {
         setAlertSuccess(false);
     };
 
+    const handleChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string,
+    ) => {
+        if (newAlignment !== null) {
+            setAlignment(newAlignment);
+        }
+    };
+
+    const [chats2Send, setChats2Send] = useState<any[] | null>()
+    useEffect(() => {
+        if(chats2Send == null) {
+            setSendData({...sendData, buttonActive: true})
+        } else {
+            if(sendData.formatedText.trim() != '' && chats2Send?.length && chats2Send.length != 0) {
+                setSendData({...sendData, buttonActive: false})
+            } else {
+                setSendData({...sendData, buttonActive: true})
+            }
+        }
+    }, [chats2Send])
+
+
+
+
     const [alignment, setAlignment] = React.useState('group');
     useEffect(() => {
         setChats2Send([])
         setSendData({...sendData, buttonActive: true, groupID: ''})
     }, [alignment])
 
-    const handleChange = (
-        event: React.MouseEvent<HTMLElement>,
-        newAlignment: string,
-    ) => {
-        setAlignment(newAlignment);
-    };
-
-    let chats:chats[] = []
-    if(groups) {
-        groups[0].chats.map((chat) => {
-            chats.push({
-                label: chat.name,
-                id: chat.id
-            })
-        })
-    }
-
-
-    const [chats2Send, setChats2Send] = useState<any[] | null>()
-    useEffect(() => {
-        if(sendData.formatedText.trim() != '' && chats2Send?.length && chats2Send.length != 0) {
-            setSendData({...sendData, buttonActive: false})
-        } else {
-            setSendData({...sendData, buttonActive: true})
-        }
-    }, [chats2Send])
-
-
-    const addressContent = () => {
-        if(!groups || !chats) {
-            return false
-        }
-        switch (alignment) {
+    const handleAutocomplete = (value: any, type: string) => {
+        switch (type) {
             case 'group':
-                return (
-                    <GroupsList onSelected={setCurrentGroup} />
-                )
+                setCurrentGroup(value.id)
                 break
             case 'chat':
-                return (
-                    <>
-                        <Autocomplete
-                            multiple
-                            id="chats"
-                            options={chats}
-                            getOptionLabel={(option) => option.label}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label="Выберете чат"
-                                />
-                            )}
-                            isOptionEqualToValue={(option, value) => option.label === value.label}
-                            sx={{
-                                width: '50%',
-                                margin: '0 0 25px 0'
-                            }}
-                            onChange={(e, value) =>  setChats2Send(value)}
-                        />
-                    </>
-                )
+                setChats2Send(value)
                 break
             default:
-                return false
                 break
         }
     }
+
+
+
+
+    const autocompletes = () => {
+        if(groups) {
+            switch (alignment) {
+                case 'group':
+                    return (
+                        <GroupsAutocomplete
+                            callback={handleAutocomplete}
+                            options={groupsAutocomplete}
+                        />
+                    )
+                    break
+                case 'chat':
+                    return (
+                        <ChatsAutocomplete
+                            callback={handleAutocomplete}
+                            options={chatsAutocomplete}
+                        />
+                    )
+                    break
+                default:
+                    break
+            }
+        }
+    }
+    const [groupsAutocomplete, setGroupsAutocomplete] = useState<any[]>([])
+    const [chatsAutocomplete, setChatsAutocomplete] = useState<any[]>([])
+    useEffect(() => {
+        if(groups) {
+            setGroupsAutocomplete(() => {
+                return groups.map((group) => {
+                    return {
+                        id: group.id,
+                        label: group.name
+                    }
+                })
+            })
+            setChatsAutocomplete(() => {
+                return groups[0].chats.map((chat) => {
+                    return {
+                        id: chat.id,
+                        label: chat.name
+                    }
+                })
+            })
+        }
+    }, [groups])
+
     const toggleButtonTheme = {
-        fontSize: '12px',
-        padding: '8px 25px'
+        fontSize: '14px',
+        padding: '8px 25px',
+        textTransform: 'unset'
     }
 
     return (
@@ -212,15 +235,17 @@ const SendPage = () => {
                 <ToggleButton value="chat" sx={toggleButtonTheme}>Адресно</ToggleButton>
             </ToggleButtonGroup>
             <div>
-                {addressContent()}
+                {autocompletes()}
             </div>
-            <Button
-                disabled={sendData.buttonActive}
-                align="left"
-                theme="button_theme_green"
-                value="Отправить"
-                onClick={sendMessageHandler}
-            />
+            <div style={{width: '100%', float: 'left'}}>
+                <Button
+                    disabled={sendData.buttonActive}
+                    align="left"
+                    theme="button_theme_green"
+                    value="Отправить"
+                    onClick={sendMessageHandler}
+                />
+            </div>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loader}

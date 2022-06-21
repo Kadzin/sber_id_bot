@@ -50,7 +50,7 @@ function stringAvatar(name: string) {
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.substring(0, 1)}`,
+            children: `${name.substring(0, 2)}`,
         };
     }
 

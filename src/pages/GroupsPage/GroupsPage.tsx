@@ -294,7 +294,7 @@ const GroupsPage = () => {
                         }}>
                             <Typography gutterBottom component="div" textAlign="center" sx={{
                                 color: "#000000",
-                                fontSize: "24px",
+                                fontSize: "1.4rem",
                                 margin: "15px",
                                 marginRight: "8px"
                             }}>
