@@ -100,7 +100,7 @@ const Header = () => {
                 <div className='right_items'>
                     <div className='user'>
                         <Avatar {...stringAvatar(userName)}/>
-                        <p>{userName}</p>
+                        <p style={{fontFamily: 'Arial'}}>{userName}</p>
                     </div>
                     <LogoutIcon
                         sx={{
