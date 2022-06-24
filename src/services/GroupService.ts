@@ -17,14 +17,14 @@ import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/SberID/bot/web/API/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
             query: () => ({
                 url: 'getFullGroups.php',
                 params: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                    token: ''
                 }
             }),
             providesTags: result => ['Group']
@@ -42,7 +42,7 @@ export const groupsAPI = createApi({
             query: () => ({
                 url: 'getUsers.php',
                 params: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                    token: ''
                 }
             })
         }),
@@ -50,7 +50,7 @@ export const groupsAPI = createApi({
             query: (cookie) => ({
                 url: 'getUser.php',
                 params: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     cookie: cookie
                 }
             })
@@ -59,7 +59,7 @@ export const groupsAPI = createApi({
             query: () => ({
                 url: 'getMessages.php',
                 params: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn'
+                    token: ''
                 }
             }),
             providesTags: result => ['Group']
@@ -69,7 +69,7 @@ export const groupsAPI = createApi({
                 url: 'sendMessage.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     gid: params.id,
                     message: params.message
                 }
@@ -81,7 +81,7 @@ export const groupsAPI = createApi({
                 url: 'sendMessage2Chat.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     chats: params.chat_id,//json_array[{id: string, label: string}]
                     message: params.message
                 }
@@ -93,7 +93,7 @@ export const groupsAPI = createApi({
                 url: 'updateMessage.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     message_id: params.id,
                     message: params.message
                 }
@@ -105,7 +105,7 @@ export const groupsAPI = createApi({
                 url: 'deleteMessage.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     message_id: params
                 }
             }),
@@ -116,7 +116,7 @@ export const groupsAPI = createApi({
                 url: 'deleteMessageFromChat.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     chat_id: params.chat_id,
                     message_id: params.message_id,
                     parent_message_id: params.parent_message_id
@@ -129,7 +129,7 @@ export const groupsAPI = createApi({
                 url: 'updateGroups.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     group_id: params.id,
                     chats: params.chats
                 }
@@ -141,7 +141,7 @@ export const groupsAPI = createApi({
                 url: 'createGroup.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     group_name: params.name,
                     theme: params.theme
                 }
@@ -153,7 +153,7 @@ export const groupsAPI = createApi({
                 url: 'removeGroup.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     group_id: params
                 }
             }),
@@ -164,7 +164,7 @@ export const groupsAPI = createApi({
                 url: 'pinMessage.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     chat_id: params.chat_id,
                     parent_message_id: params.parent_message_id
                 }
@@ -176,7 +176,7 @@ export const groupsAPI = createApi({
                 url: 'unpinMessage.php',
                 method: 'POST',
                 body: {
-                    token: 'asdfghqwerty123456asdfgh123456zxcvbn',
+                    token: '',
                     chat_id: params.chat_id,
                     parent_message_id: params.parent_message_id
                 }
