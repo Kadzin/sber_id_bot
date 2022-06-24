@@ -17,7 +17,7 @@ const ChatsAutocomplete:FC<СAprops> = (props) => {
             renderInput={(params) => <TextField
                 {...params}
                 variant="standard"
-                label={'Выберете chat'}
+                label={'Выберете чат'}
             />}
             isOptionEqualToValue={(option, value) => option.label === value.label}
             onChange={(e, value) => props.callback(value, 'chat')}
