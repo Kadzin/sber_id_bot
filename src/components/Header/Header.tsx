@@ -3,7 +3,7 @@ import Toolbar from '@mui/material/Toolbar';
 import "./Header.css";
 import { styled } from '@mui/material/styles';
 import {groupsAPI} from "../../services/GroupService";
-import {useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 
@@ -58,31 +58,22 @@ function stringAvatar(name: string) {
 
 
 
-const Header = () => {
 
-    const cookies = document.cookie.split("; ").map(c => {
-        return {name: c.split("=")[0], value: c.split("=")[1]}
-    })
-    const cookie = cookies.filter(c => c.name == 'btsc')
+const Header = () => {
 
     const [logoutRequest, {data: logoutResponse}] = groupsAPI.useLogoutMutation()
     const logout = () => {
-        if(cookie.length != 0) {
-            logoutRequest(cookie[0].value)
-        } else {
-            document.location.reload()
-        }
+        logoutRequest('')
     }
     useEffect(() => {
         if(logoutResponse && logoutResponse.response == 'true') {
-            document.cookie = "btsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             document.location.reload()
         }
     }, [logoutResponse])
 
 
 
-    const {data: users, isSuccess: userFetchStatus} = groupsAPI.useGetUserQuery(cookie[0].value)
+    const {data: users, isSuccess: userFetchStatus} = groupsAPI.useGetUserQuery('')
     const [userName, setUserName] = useState('User')
     useEffect(() => {
         if(users && users.id != '00000000') {

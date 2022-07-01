@@ -20,11 +20,7 @@ function App() {
     const cookie = cookies.filter(c => c.name == 'btsc')
 
     useEffect(() => {
-        if(cookie.length != 0) {
-            checkCookie(cookie[0].value)
-        } else {
-            setIsAuthed(false)
-        }
+        checkCookie('')
     }, [])
 
     useEffect(() => {
@@ -35,6 +31,9 @@ function App() {
         }
     }, [checkCookieResponse])
 
+    const loginCallbackHandler = (success: boolean) => {
+        setIsAuthed(success)
+    }
 
 
     if(cookieLoading) {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import '../pages.css'
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,7 @@ function setCookie(cname: string, cvalue: string, exdays: number) {
     let expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
 
 const LoginPage = () => {
 
@@ -46,8 +47,7 @@ const LoginPage = () => {
         if(loginResponse) {
             switch (loginResponse.status) {
                 case 'true':
-                    setCookie('btsc', loginResponse.cookie, 365)
-                    document.location.reload()
+                    window.location.reload()
                     break;
                 case 'false':
                     alert('Неправильный логин или пароль')

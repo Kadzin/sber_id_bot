@@ -11,56 +11,41 @@ import {IMessage} from "../models/IMessage";
 import {IDeleteMessage} from "../models/IDeleteMessage";
 import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 
-// dev host: https://nse-work.ru/test/build/API
 // prod host: https://nse-work.ru/SberID/bot/web/API/
+// dev host: https://nse-work.ru/test/build/API/
+// dev real server host: https://nse-work.ru/test/build/API3.0/
 
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API3.0/'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
             query: () => ({
-                url: 'getFullGroups.php',
-                params: {
-                    token: ''
-                }
+                url: 'getFullGroups.php'
             }),
             providesTags: result => ['Group']
         }),
-        checkCookie: build.mutation<IGroupsUpdateResponse, string>({
+        checkCookie: build.mutation<IGroupsUpdateResponse, ''>({
             query: (cookie) => ({
                 url: 'auth.php',
                 method: 'POST',
-                body: {
-                    cookie: cookie
-                }
             })
         }),
         fetchUsers: build.query<IUsers[], ''>({
             query: () => ({
                 url: 'getUsers.php',
-                params: {
-                    token: ''
-                }
             })
         }),
-        getUser: build.query<IUsers, string>({
+        getUser: build.query<IUsers, ''>({
             query: (cookie) => ({
                 url: 'getUser.php',
-                params: {
-                    token: '',
-                    cookie: cookie
-                }
             })
         }),
         getMessages: build.query<IMessage[], ''>({
             query: () => ({
                 url: 'getMessages.php',
-                params: {
-                    token: ''
-                }
             }),
             providesTags: result => ['Group']
         }),
@@ -69,7 +54,6 @@ export const groupsAPI = createApi({
                 url: 'sendMessage.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     gid: params.id,
                     message: params.message
                 }
@@ -81,7 +65,6 @@ export const groupsAPI = createApi({
                 url: 'sendMessage2Chat.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     chats: params.chat_id,//json_array[{id: string, label: string}]
                     message: params.message
                 }
@@ -93,7 +76,6 @@ export const groupsAPI = createApi({
                 url: 'updateMessage.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     message_id: params.id,
                     message: params.message
                 }
@@ -105,7 +87,6 @@ export const groupsAPI = createApi({
                 url: 'deleteMessage.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     message_id: params
                 }
             }),
@@ -116,7 +97,6 @@ export const groupsAPI = createApi({
                 url: 'deleteMessageFromChat.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     chat_id: params.chat_id,
                     message_id: params.message_id,
                     parent_message_id: params.parent_message_id
@@ -129,7 +109,6 @@ export const groupsAPI = createApi({
                 url: 'updateGroups.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     group_id: params.id,
                     chats: params.chats
                 }
@@ -141,7 +120,6 @@ export const groupsAPI = createApi({
                 url: 'createGroup.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     group_name: params.name,
                     theme: params.theme
                 }
@@ -153,7 +131,6 @@ export const groupsAPI = createApi({
                 url: 'removeGroup.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     group_id: params
                 }
             }),
@@ -164,7 +141,6 @@ export const groupsAPI = createApi({
                 url: 'pinMessage.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     chat_id: params.chat_id,
                     parent_message_id: params.parent_message_id
                 }
@@ -176,7 +152,6 @@ export const groupsAPI = createApi({
                 url: 'unpinMessage.php',
                 method: 'POST',
                 body: {
-                    token: '',
                     chat_id: params.chat_id,
                     parent_message_id: params.parent_message_id
                 }
@@ -193,13 +168,10 @@ export const groupsAPI = createApi({
                 }
             })
         }),
-        logout: build.mutation<IGroupsUpdateResponse, string>({
+        logout: build.mutation<IGroupsUpdateResponse, ''>({
             query: (params) => ({
                 url: 'logout.php',
                 method: 'POST',
-                body: {
-                    cookie: params
-                }
             })
         })
     })
