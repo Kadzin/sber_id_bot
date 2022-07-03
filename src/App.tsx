@@ -47,11 +47,11 @@ function App() {
         )
     }
 
-    if(!isAuthed) {
+    /*if(!isAuthed) {
         return (
             <LoginPage />
         )
-    }
+    }*/
 
     return (
         <>

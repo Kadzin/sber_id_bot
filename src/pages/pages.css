@@ -28,3 +28,13 @@
 .box > div:nth-child(n) {
     margin: 40px;
 }
+.user_cell_header {
+    font-family: Arial;
+    font-size: 1em;
+    color: #303844;
+    text-align: center;
+    font-weight: bold;
+
+    margin: 0 25px;
+    width: 30%;
+}

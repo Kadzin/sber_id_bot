@@ -18,7 +18,7 @@ import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API3.0/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API/'}),
     tagTypes: ['Group'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
