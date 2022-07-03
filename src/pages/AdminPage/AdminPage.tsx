@@ -8,8 +8,10 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import {styled} from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
-import {tableCellClasses} from "@mui/material";
+import {Box, Divider, Stack, tableCellClasses, TextField} from "@mui/material";
 import {groupsAPI} from "../../services/GroupService";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import UserRow from "../../components/UI/UserRow/UserRow";
 
 const AdminPage = () => {
 
@@ -56,34 +58,62 @@ const AdminPage = () => {
 
     const {data: users, isLoading, error} = groupsAPI.useFetchUsersQuery('');
 
+    const adduser = () => {
+        console.log('click')
+    }
+
 
     return (
         <div>
             <p className="title">Пользователи</p>
-            <div className="box">
-                <TableContainer component={Paper} sx={{ maxWidth: 800, width: "auto" }}>
-                    <Table stickyHeader aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell>Имя пользователя</StyledTableCell>
-                                <StyledTableCell>Teleram ID</StyledTableCell>
-                                <StyledTableCell>Тип доступа</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users &&  users.map((user) => (
-                                <StyledTableRow
-                                    key={user.id}
-                                    sx={{ '&:last-child th': { border: 0 } }}
-                                >
-                                    <StyledTableCellLeft>{user.name}</StyledTableCellLeft>
-                                    <StyledTableCellCenter>{user.id}</StyledTableCellCenter>
-                                    <StyledTableCell>{user.role}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+            <div
+                style={{
+                    backgroundColor: "rgb(250, 250, 252)",
+                    float: "left",
+                    width: "100%",
+                    padding: "25px",
+                    boxSizing: "border-box",
+                    borderRadius: "10px"
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                        padding: "25px",
+                        boxSizing: "border-box"
+                    }}
+                >
+                    <TextField
+                        id="standard-search"
+                        label="Найти по имени"
+                        type="search"
+                        variant="standard"
+                        sx={{
+                            width: "30%",
+                        }}
+                    />
+                    <PersonAddAltIcon
+                        sx={{
+                            padding: "8px",
+                            cursor: "pointer"
+                        }}
+                        onClick={() => adduser()}
+                    />
+                </div>
+                <Stack
+                    direction='column'
+                    alignItems='stretch'
+                    justifyContent='flex-start'
+                    spacing={2}
+                >
+                    <UserRow id='141551871' name='Sergey Nyuskhaev' role='administrator' />
+                    <UserRow id='141551871' name='Super_Long_Name 11111112312312' role='administrator' />
+                    <UserRow id='141551871' name='Sergey Nyuskhaev' role='administrator' />
+                    <UserRow id='141551871' name='Sergey Nyuskhaev' role='administrator' />
+                </Stack>
             </div>
         </div>
     );
