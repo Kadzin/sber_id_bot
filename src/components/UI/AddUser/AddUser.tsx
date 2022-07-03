@@ -1,13 +1,14 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {Alert, Snackbar, TextField} from "@mui/material";
+import {Alert, Divider, MenuItem, Snackbar, TextField} from "@mui/material";
 import Button from "../Button/Button";
+import './AddUser.css'
+import userRow from "../UserRow/UserRow";
 
 interface modalProps {
     openModal: boolean,
-    closeModal: boolean,
     closeCallback: any
 }
 
@@ -28,14 +29,30 @@ const AddUser:FC<modalProps> = (props) => {
         borderRadius: "10px"
     };
 
-    const [openAddGroup, setOpenAddGroup] = React.useState(false);
-    const handleOpenAddGroup = () => {
-        setOpenAddGroup(true);
-    };
-    const handleCloseAddGroup = () => {
-        setOpenAddGroup(false);
-    };
+    const inputStyles = {
+        width: '250px',
+        margin: '25px'
+    }
 
+    const [idValue, setIdValue] = useState('')
+    const handleIdChange = (value: string) => {
+        setIdValue(value)
+    }
+    const [roleSelect, setRoleSelect] = useState('user')
+    const handleRoleSelect = (value: string) => {
+        setRoleSelect(value)
+    }
+    const [idErrorValue, setIdErrorValue] = useState(false)
+
+    const checkFormData = () => {
+        if(idValue != '') {
+            setIdErrorValue(false)
+            console.log(idValue)
+            console.log(roleSelect)
+        } else {
+            setIdErrorValue(true)
+        }
+    }
 
 
     return (
@@ -51,37 +68,46 @@ const AddUser:FC<modalProps> = (props) => {
                     fontSize: "24px",
                     margin: "15px"
                 }}>
-                    Напишите название новой группы
+                    Добавить нового пользователя
                 </Typography>
-                <Box sx={{
-                    width: "100%;",
-                    display: "flex",
-                    justifyContent: "center",
-                    margin: "25px 0"
-                }}>
+                <Divider sx={{ margin: "0 0 25px 0" }} />
+                <p className='content-container-description'>
+                    Для регистрации нового пользователя укажите его id телеграм (как узнать <a target="_blank" href="https://messenge.ru/kak-uznat-id-telegram/">читай тут</a>),<br />
+                    а также выберете тип доступа.<br />
+                    После создания аккаунта пользователю необходимо будет активировать аккаунт самостоятельно.<br />
+                    Для этого необходимо будет написать чат боту в личку и придумать пароль.
+                </p>
+                <Divider sx={{ margin: "25px 0 0 0" }} />
+                <div className='content-container'>
                     <TextField
                         required
-                        id="standard-required"
-                        label="Не более 40 символов"
-                        defaultValue=""
-                        placeholder="New group"
+                        error={idErrorValue}
+                        id="telegram-id"
+                        label="Telegram ID"
                         variant="standard"
-                        sx={{
-                            width: "400px"
-                        }}
+                        placeholder="12345678"
+                        sx={inputStyles}
+                        value={idValue}
+                        onChange={(e) => handleIdChange(e.target.value)}
                     />
-                </Box>
-                <Button
-                    disabled={false}
-                    align="center"
-                    theme="button_theme_green"
-                    value="Создать"
-                    style={{
-                        marginTop: "20px",
-                        marginBottom: "10px"
-                    }}
-                    onClick={() => console.log('click')}
-                />
+                    <TextField
+                        id="role"
+                        select
+                        label="Укажите права для пользователя"
+                        value={roleSelect}
+                        onChange={(e) => handleRoleSelect(e.target.value)}
+                        variant="standard"
+                        sx={inputStyles}
+                    >
+                        <MenuItem value="user">user</MenuItem>
+                        <MenuItem value="moderator">moderator</MenuItem>
+                        <MenuItem value="administrator">administrator</MenuItem>
+                    </TextField>
+                </div>
+                <Button disabled={false} align="center" theme="button_theme_green" value="Создать" style={{
+                    marginTop: "20px",
+                    marginBottom: "10px"
+                }} onClick={checkFormData} />
             </Box>
         </Modal>
     );
