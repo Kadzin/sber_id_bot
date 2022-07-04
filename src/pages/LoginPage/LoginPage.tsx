@@ -7,15 +7,6 @@ import Button from "../../components/UI/Button/Button";
 import Modal from "@mui/material/Modal";
 import {groupsAPI} from "../../services/GroupService";
 
-
-function setCookie(cname: string, cvalue: string, exdays: number) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-
 const LoginPage = () => {
 
     const style = {
@@ -58,12 +49,6 @@ const LoginPage = () => {
             }
         }
     }, [loginResponse])
-
-    document.addEventListener('keypress', (event) => {
-        if(event.key == 'Enter') {
-            login()
-        }
-    });
 
     return (
         <>

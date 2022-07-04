@@ -1,19 +1,29 @@
 import React, {FC, useEffect, useState} from 'react';
+import {
+    Alert,
+    AlertColor,
+    Backdrop,
+    Chip,
+    CircularProgress,
+    Divider,
+    MenuItem,
+    Snackbar,
+    TextField
+} from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {Alert, AlertColor, Backdrop, CircularProgress, Divider, MenuItem, Snackbar, TextField} from "@mui/material";
 import Button from "../Button/Button";
-import './AddUser.css'
-import userRow from "../UserRow/UserRow";
+import './UpdateUser.css';
 import {groupsAPI} from "../../../services/GroupService";
 
 interface modalProps {
+    id: string,
     openModal: boolean,
     closeCallback: any
 }
 
-const AddUser:FC<modalProps> = (props) => {
+const UpdateUser:FC<modalProps> = (props) => {
 
     const [alertMessage, setAlertMessage] = useState('')
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success')
@@ -47,55 +57,55 @@ const AddUser:FC<modalProps> = (props) => {
         margin: '25px'
     }
 
-    const [idValue, setIdValue] = useState('')
-    const handleIdChange = (value: string) => {
-        setIdValue(value)
+    const [nameErrorValue, setNameErrorValue] = useState(false)
+    const [nameValue, setNameValue] = useState('')
+    const handleNameChange = (value: string) => {
+        setNameValue(value)
     }
-    const [roleSelect, setRoleSelect] = useState('user')
-    const handleRoleSelect = (value: string) => {
-        setRoleSelect(value)
-    }
-    const [idErrorValue, setIdErrorValue] = useState(false)
 
     const checkFormData = () => {
-        if(idValue != '') {
-            setIdErrorValue(false)
-            addUser(idValue, roleSelect)
+        if(nameValue != '') {
+            setNameErrorValue(false)
+            updateUser('name')
         } else {
-            setIdErrorValue(true)
+            setNameErrorValue(true)
         }
     }
 
-    const [addUserAPI, {data: addUserResponse, isLoading: addUserIsLoading}] = groupsAPI.useAddUserMutation()
-    const addUser = async (id: string, role: string) => {
-        await addUserAPI({
-            id: id,
-            role: role
+    const resetPass = () => {
+        if(window.confirm('Вы уверены, что хотите сбросить пароль пользователя? Это действие невозможно отменить')) {
+            updateUser('pass')
+        }
+    }
+
+    const [updateUserAPI, {data: updateUserResponse, isLoading: updateUserIsLoading}] = groupsAPI.useUpdateUserMutation()
+
+    const updateUser = async (action: string) => {
+        await updateUserAPI({
+            action: action,
+            id: props.id,
+            name: nameValue
         })
     }
     useEffect(() => {
-        if(addUserResponse && addUserResponse.response == "Success") {
-            setAlertMessage('Пользователь успешно добавлен')
+        if(updateUserResponse && updateUserResponse.response == "Success") {
+            setAlertMessage('Запрос выполнен успешно')
             setAlertSeverity('success')
             setAlertSuccess(true)
-            handleIdChange('')
-            setRoleSelect('user')
-        } else if(addUserResponse && addUserResponse.response == "You have no permissions") {
+            props.closeCallback()
+        } else if(updateUserResponse && updateUserResponse.response == "You have no permissions") {
             setAlertMessage('Вы не можете выполнить это действие. Обратитесь к администратору')
             setAlertSeverity('warning')
             setAlertSuccess(true)
-            handleIdChange('')
-            setRoleSelect('user')
         }
-    }, [addUserResponse])
+    }, [updateUserResponse])
     useEffect(() => {
-        if(addUserIsLoading == false) {
+        if(updateUserIsLoading == false) {
             setLoader(false)
-            props.closeCallback()
         } else {
             setLoader(true)
         }
-    }, [addUserIsLoading])
+    }, [updateUserIsLoading])
 
     return (
         <>
@@ -111,46 +121,34 @@ const AddUser:FC<modalProps> = (props) => {
                         fontSize: "24px",
                         margin: "15px"
                     }}>
-                        Добавить нового пользователя
+                        Редактировать данные пользователя
                     </Typography>
                     <Divider sx={{ margin: "0 0 25px 0" }} />
                     <p className='content-container-description'>
-                        Для регистрации нового пользователя укажите его id телеграм (как узнать <a target="_blank" href="https://messenge.ru/kak-uznat-id-telegram/">читай тут</a>),<br />
-                        а также выберете тип доступа.<br />
-                        После создания аккаунта пользователю необходимо будет активировать аккаунт самостоятельно.<br />
-                        Для этого необходимо будет написать чат боту в личку и придумать пароль.
+                        Вы можете изменить имя пользователя, а также сбросить пароль (пользователя при это разлогинит из сервиса и необходимо будет заново активировать аккаунт в телеграме)
                     </p>
                     <Divider sx={{ margin: "25px 0 0 0" }} />
                     <div className='content-container'>
                         <TextField
                             required
-                            error={idErrorValue}
-                            id="telegram-id"
-                            label="Telegram ID"
+                            error={nameErrorValue}
+                            id="user-new-name"
+                            label="Новое имя пользователя"
                             variant="standard"
-                            placeholder="12345678"
+                            placeholder="Имя Пользователя"
                             sx={inputStyles}
-                            value={idValue}
-                            onChange={(e) => handleIdChange(e.target.value)}
+                            value={nameValue}
+                            onChange={(e) => handleNameChange(e.target.value)}
                         />
-                        <TextField
-                            id="role"
-                            select
-                            label="Укажите права для пользователя"
-                            value={roleSelect}
-                            onChange={(e) => handleRoleSelect(e.target.value)}
-                            variant="standard"
-                            sx={inputStyles}
-                        >
-                            <MenuItem value="user">user</MenuItem>
-                            <MenuItem value="moderator">moderator</MenuItem>
-                            <MenuItem value="administrator">administrator</MenuItem>
-                        </TextField>
+                        <Button disabled={false} align="flex" theme="button_theme_green" value="Изменить" onClick={checkFormData} />
                     </div>
-                    <Button disabled={false} align="center" theme="button_theme_green" value="Создать" style={{
+                    <Divider>
+                        <Chip label="ИЛИ" />
+                    </Divider>
+                    <Button disabled={false} align="center" theme="button_theme_red" value="Сбросить пароль" style={{
                         marginTop: "20px",
                         marginBottom: "10px"
-                    }} onClick={checkFormData} />
+                    }} onClick={resetPass} />
                 </Box>
             </Modal>
             <Backdrop
@@ -173,4 +171,4 @@ const AddUser:FC<modalProps> = (props) => {
     );
 };
 
-export default AddUser;
+export default UpdateUser;

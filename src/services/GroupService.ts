@@ -10,6 +10,8 @@ import {ILoginResponse} from "../models/ILoginResponse";
 import {IMessage} from "../models/IMessage";
 import {IDeleteMessage} from "../models/IDeleteMessage";
 import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
+import {IAddUser} from "../models/IAddUser";
+import {IUpdateUser} from "../models/IUpdateUser";
 
 // prod host: https://nse-work.ru/SberID/bot/web/API/
 // dev host: https://nse-work.ru/test/build/API/
@@ -18,8 +20,8 @@ import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 
 export const groupsAPI = createApi({
     reducerPath: 'groupsAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API/'}),
-    tagTypes: ['Group'],
+    baseQuery: fetchBaseQuery({baseUrl: 'https://nse-work.ru/test/build/API3.0/'}),
+    tagTypes: ['Group', 'User'],
     endpoints: (build) => ({
         fetchGroups: build.query<IGroups[], ''>({
             query: () => ({
@@ -36,12 +38,14 @@ export const groupsAPI = createApi({
         fetchUsers: build.query<IUsers[], ''>({
             query: () => ({
                 url: 'getUsers.php',
-            })
+            }),
+            providesTags: result => ['User']
         }),
         getUser: build.query<IUsers, ''>({
             query: (cookie) => ({
                 url: 'getUser.php',
-            })
+            }),
+            providesTags: result => ['User']
         }),
         getMessages: build.query<IMessage[], ''>({
             query: () => ({
@@ -173,6 +177,39 @@ export const groupsAPI = createApi({
                 url: 'logout.php',
                 method: 'POST',
             })
+        }),
+        addUser: build.mutation<IGroupsUpdateResponse, IAddUser>({
+            query: (params) => ({
+                url: 'addUser.php',
+                method: 'POST',
+                body: {
+                    telegram_id: params.id,
+                    role: params.role
+                }
+            }),
+            invalidatesTags: result => ['User']
+        }),
+        deleteUser: build.mutation<IGroupsUpdateResponse, string>({
+            query: (params) => ({
+                url: 'removeUser.php',
+                method: 'POST',
+                body: {
+                    telegram_id: params
+                }
+            }),
+            invalidatesTags: result => ['User']
+        }),
+        updateUser: build.mutation<IGroupsUpdateResponse, IUpdateUser>({
+            query: (params) => ({
+                url: 'updateUser.php',
+                method: 'POST',
+                body: {
+                    action: params.action,
+                    id: params.id,
+                    name: params.name
+                }
+            }),
+            invalidatesTags: result => ['User']
         })
     })
 })
