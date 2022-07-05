@@ -9,34 +9,10 @@ import {Backdrop, CircularProgress} from "@mui/material";
 
 function App() {
 
-    const [isAuthed, setIsAuthed] = useState(false)
+    const {data: authResponse, isLoading: authIsLoading, error: authError} = groupsAPI.useAuthQuery('')
 
 
-    const [checkCookie, {data: checkCookieResponse, isLoading: cookieLoading}] = groupsAPI.useCheckCookieMutation()
-
-    const cookies = document.cookie.split("; ").map(c => {
-        return {name: c.split("=")[0], value: c.split("=")[1]}
-    })
-    const cookie = cookies.filter(c => c.name == 'btsc')
-
-    useEffect(() => {
-        checkCookie('')
-    }, [])
-
-    useEffect(() => {
-        if(checkCookieResponse && checkCookieResponse.response == 'true') {
-            setIsAuthed(true)
-        } else {
-            setIsAuthed(false)
-        }
-    }, [checkCookieResponse])
-
-    const loginCallbackHandler = (success: boolean) => {
-        setIsAuthed(success)
-    }
-
-
-    if(cookieLoading) {
+    if(authIsLoading) {
         return (
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0, 0, 0, .2)' }}
@@ -46,28 +22,27 @@ function App() {
             </Backdrop>
         )
     }
-
-    if(!isAuthed) {
+    if(authResponse && authResponse.status == 'ok') {
+        return (
+            <>
+                <Header userName={authResponse.userName} />
+                <Box
+                    sx={{
+                        maxWidth: 1200,
+                        height: "auto",
+                        margin: "auto"
+                    }}
+                >
+                    <NavBar role={authResponse.role} />
+                    <Outlet />
+                </Box>
+            </>
+        )
+    } else {
         return (
             <LoginPage />
         )
     }
-
-    return (
-        <>
-            <Header />
-            <Box
-                sx={{
-                    maxWidth: 1200,
-                    height: "auto",
-                    margin: "auto"
-                }}
-            >
-                <NavBar />
-                <Outlet />
-            </Box>
-        </>
-    );
 }
 
 export default App;

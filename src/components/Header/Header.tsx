@@ -1,20 +1,14 @@
 import * as React from 'react';
-import Toolbar from '@mui/material/Toolbar';
 import "./Header.css";
-import { styled } from '@mui/material/styles';
 import {groupsAPI} from "../../services/GroupService";
 import {FC, useEffect, useState} from "react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 
 
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
-    // Override media queries injected by theme.mixins.toolbar
-    '@media all': {
-        minHeight: 60,
-        paddingTop: 10
-    },
-}));
+interface headerProps {
+    userName: string;
+}
 
 
 function stringToColor(string: string) {
@@ -59,7 +53,7 @@ function stringAvatar(name: string) {
 
 
 
-const Header = () => {
+const Header:FC<headerProps> = (props) => {
 
     const [logoutRequest, {data: logoutResponse}] = groupsAPI.useLogoutMutation()
     const logout = () => {
@@ -72,26 +66,14 @@ const Header = () => {
     }, [logoutResponse])
 
 
-
-    const {data: users, isSuccess: userFetchStatus} = groupsAPI.useGetUserQuery('')
-    const [userName, setUserName] = useState('User')
-    useEffect(() => {
-        if(users && users.id != '00000000') {
-            setUserName(users.name)
-        } else if(users && users.id == '00000000') {
-            logout()
-        }
-    }, [users])
-
-
     return (
         <header className='background'>
             <div className='elems'>
                 <img alt="logo" src="https://nse-work.ru/test/build/assets/SberID_logo.svg" />
                 <div className='right_items'>
                     <div className='user'>
-                        <Avatar {...stringAvatar(userName)}/>
-                        <p style={{fontFamily: 'Arial'}}>{userName}</p>
+                        <Avatar {...stringAvatar(props.userName)}/>
+                        <p style={{fontFamily: 'Arial'}}>{props.userName}</p>
                     </div>
                     <LogoutIcon
                         sx={{
@@ -104,37 +86,6 @@ const Header = () => {
             </div>
         </header>
     )
-
-    /*return (
-        <AppBar position="static" sx={{
-            backgroundColor: "#fafafc"
-        }}>
-            <Container maxWidth="xl">
-                <StyledToolbar sx={{
-                    minHeight: "100px"
-                }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={1} />
-                        <Grid item xs={2} sx={{
-                            alignSelf:"center"
-                        }}>
-                            <img alt="logo" src="https://nse-work.ru/test/build/assets/sber_logo_main_7d73a15d4b.4eee7bc98b3c629a0522.png" />
-                        </Grid>
-                        <Grid item xs >
-                            <Typography variant="h5" gutterBottom component="div" sx={{
-                                color: "#000000"
-                            }}>
-                                Сбер ID team bot
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button disabled={false} align="" theme="button_theme_red" value="Выход" onClick={logout} />
-                        </Grid>
-                    </Grid>
-                </StyledToolbar>
-            </Container>
-        </AppBar>
-    );*/
 };
 
 export default Header;

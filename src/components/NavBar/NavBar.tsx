@@ -1,87 +1,77 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import NavItem from "./NavItem/NavItem";
 import {Link, useLocation} from "react-router-dom";
 import './NavBar.css'
 
+interface NavBarInterface {
+    role: string
+}
 
+const NavBar:FC<NavBarInterface> = (props) => {
 
-const NavBar = () => {
+    const [pages, setPages] = useState([
+        {
+            linkTo: '/send',
+            text: 'Отправить сообщение',
+            active: 'active',
+            hide: false
+        },
+        {
+            linkTo: '/groups',
+            text: 'Группы и Чаты',
+            active: '',
+            hide: false
+        },
+        {
+            linkTo: '/users',
+            text: 'Пользователи',
+            active: '',
+            hide: false
+        },
+        {
+            linkTo: '/messages',
+            text: 'Сообщения',
+            active: '',
+            hide: false
+        },
+    ])
 
-    const [active, setActive] = useState({
-        page_1: 'active',
-        page_2: '',
-        page_3: '',
-        page_4: ''
-    })
+    if(props.role == 'user') {
+        pages[2].hide = true
+    } else {
+        pages[2].hide = false
+    }
+
     let location = useLocation()
 
+
     useEffect(() => {
-        handleClick(location.pathname)
-    }, [location])
-
-    function handleClick(page: string) {
-
-        switch (page) {
-            case '/send':
-                setActive({
-                    page_1: 'active',
-                    page_2: '',
-                    page_3: '',
-                    page_4: ''
-                })
-                break;
-            case '/groups':
-                setActive({
-                    page_1: '',
-                    page_2: 'active',
-                    page_3: '',
-                    page_4: ''
-                })
-                break;
-            case '/users':
-                setActive({
-                    page_1: '',
-                    page_2: '',
-                    page_3: 'active',
-                    page_4: ''
-                })
-                break;
-            case '/messages':
-                setActive({
-                    page_1: '',
-                    page_2: '',
-                    page_3: '',
-                    page_4: 'active'
-                })
-                break;
-            default:
-                setActive({
-                    page_1: 'active',
-                    page_2: '',
-                    page_3: '',
-                    page_4: ''
-                })
-                break;
+        let newPages = [...pages]
+        for(let i = 0; i < newPages.length; i++) {
+            if(newPages[i].linkTo == location.pathname) {
+                newPages[i].active = 'active'
+            } else {
+                newPages[i].active = ''
+            }
         }
-    }
+        setPages(newPages)
+    }, [location])
 
 
     return (
-            <div className="nav_bar">
-                <Link to="/send">
-                    <NavItem callback={handleClick} page="/send" type={active.page_1} text="Отправить сообщение"/>
-                </Link>
-                <Link to="/groups">
-                    <NavItem callback={handleClick} page="/groups" type={active.page_2} text="Группы и Чаты"/>
-                </Link>
-                <Link to="/users">
-                    <NavItem callback={handleClick} page="/users" type={active.page_3} text="Пользователи"/>
-                </Link>
-                <Link to="/messages">
-                    <NavItem callback={handleClick} page="/messages" type={active.page_4} text="Сообщения"/>
-                </Link>
-            </div>
-    );
+        <div className="nav_bar">
+            {pages && pages.map((item, index) => {
+                if(!item.hide) {
+                    return (
+                        <Link key={item.linkTo} to={item.linkTo}>
+                            <NavItem type={item.active} text={item.text} index={index} />
+                        </Link>
+                    )
+                }
+            }
+            )}
+        </div>
+    )
 };
 
 export default NavBar;

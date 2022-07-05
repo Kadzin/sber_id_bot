@@ -12,6 +12,7 @@ import {IDeleteMessage} from "../models/IDeleteMessage";
 import {ISendMessage2Chat} from "../models/ISendMessage2Chat";
 import {IAddUser} from "../models/IAddUser";
 import {IUpdateUser} from "../models/IUpdateUser";
+import {IAuth} from "../models/IAuth";
 
 // prod host: https://nse-work.ru/SberID/bot/web/API/
 // dev host: https://nse-work.ru/test/build/API/
@@ -29,10 +30,9 @@ export const groupsAPI = createApi({
             }),
             providesTags: result => ['Group']
         }),
-        checkCookie: build.mutation<IGroupsUpdateResponse, ''>({
-            query: (cookie) => ({
-                url: 'auth.php',
-                method: 'POST',
+        auth: build.query<IAuth, ''>({
+            query: () => ({
+                url: 'auth.php'
             })
         }),
         fetchUsers: build.query<IUsers[], ''>({
