@@ -185,6 +185,7 @@ const MessagesPage = () => {
                             messageText={message.text}
                             chatMessages={message.messages}
                             pinned={pinned}
+                            author={message.author}
                             updateMessageCallback={updateMessage}
                             deleteMessageCallback={deleteMessage}
                             deleteChatMessageCallback={deleteChatMessage}

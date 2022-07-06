@@ -7,6 +7,7 @@ import Menu from "@mui/material/Menu";
 import "./UserRow.css";
 import {groupsAPI} from "../../../services/GroupService";
 import {Alert, AlertColor, Backdrop, CircularProgress, Snackbar} from "@mui/material";
+import UserContextMenu from "./UserContextMenu/UserContextMenu";
 
 interface userProps {
     id: string,
@@ -14,7 +15,9 @@ interface userProps {
     role: string,
     badge?: string,
     setUpdateUserID: any,
-    showEditModal: any
+    setUpdateUserRole: any,
+    showEditModal: any,
+    userRole: string
 }
 
 function stringToColor(string: string) {
@@ -71,25 +74,11 @@ const UserRow:FC<userProps> = (props) => {
         setAlertSuccess(false);
     };
 
-    const ITEM_HEIGHT = 48;
-    const [menuAnchorEl, setmenuAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(menuAnchorEl);
-    const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setmenuAnchorEl(event.currentTarget);
-    };
-    const handleCloseMenu = () => {
-        setmenuAnchorEl(null);
-    };
+
 
     const [deleteUserAPI, {data: deleteUserResponse, isLoading: deleteUserLoading}] = groupsAPI.useDeleteUserMutation()
 
-    const editUser = () => {
-        handleCloseMenu()
-        props.setUpdateUserID(props.id)
-        props.showEditModal()
-    }
     const deleteUser = async () => {
-        handleCloseMenu()
         if(window.confirm('Вы уверены? Это действие невозможно будет отменить.')) {
             await deleteUserAPI(props.id)
         }
@@ -113,6 +102,21 @@ const UserRow:FC<userProps> = (props) => {
         }
     }, [deleteUserLoading])
 
+    const checkForAdmin = () => {
+        if(props.userRole == 'administrator') {
+            return (
+                <UserContextMenu
+                    setUpdateUserID={props.setUpdateUserID}
+                    setUpdateUserRole={props.setUpdateUserRole}
+                    showEditModal={props.showEditModal}
+                    deleteUser={deleteUser}
+                    id={props.id}
+                    role={props.role}
+                />
+            )
+        }
+    }
+
     return (
         <>
             <div className="container">
@@ -122,34 +126,7 @@ const UserRow:FC<userProps> = (props) => {
                     <p className="user_cell">{props.id}</p>
                     <p className="user_cell">{props.role}</p>
                 </div>
-                <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClickMenu}
-                >
-                    <MoreVertIcon />
-                </IconButton>
-                <Menu
-                    id="long-menu"
-                    MenuListProps={{
-                        'aria-labelledby': 'long-button',
-                    }}
-                    anchorEl={menuAnchorEl}
-                    open={open}
-                    onClose={handleCloseMenu}
-                    PaperProps={{
-                        style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: '20ch',
-                        },
-                    }}
-                >
-                    <MenuItem onClick={editUser}>Редактировать</MenuItem>
-                    <MenuItem onClick={deleteUser}>Удалить</MenuItem>
-                </Menu>
+                {checkForAdmin()}
             </div>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

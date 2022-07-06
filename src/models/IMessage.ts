@@ -11,5 +11,6 @@ export interface IMessage {
         chat_name: string,
         message_id: string,
         pinned: string
-    }]
+    }],
+    author: string
 }

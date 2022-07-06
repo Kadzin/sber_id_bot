@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../pages.css'
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -20,6 +20,7 @@ import {IUsers} from "../../models/IUsers";
 const AdminPage = () => {
 
     const {data: users, isLoading, error} = groupsAPI.useFetchUsersQuery('');
+    const {data: userData, isLoading: userDataIsLoading, error: userDataError} = groupsAPI.useGetUserQuery('')
 
     const [openAddUserModal, setOpenAddUserModal] = React.useState(false);
     const handleOpenAddUserModal = () => {
@@ -30,6 +31,7 @@ const AdminPage = () => {
     };
 
     const [updateUserID, setUpdateUserID] = useState('')
+    const [updateUserRole, setUpdateUserRole] = useState('')
     const [openUpdateUser, setOpenUpdateUser] = useState(false)
     const handleOpenUpdateUser = () => {
         setOpenUpdateUser(true)
@@ -40,14 +42,6 @@ const AdminPage = () => {
 
     const [searchValue, setSearchValue] = useState('')
 
-    //function instanceOfA(object: any): object is A {
-    //     return 'member' in object;
-    // }
-    //
-    // var a:any={member:"foobar"};
-    //
-    // if (instanceOfA(a)) {
-    //     alert(a.member);
     if(users && users[0].id != '00000000') {
         return (
             <div>
@@ -98,14 +92,16 @@ const AdminPage = () => {
                         spacing={2}
                     >
                         {users && users.map((user) => {
-                                if (user.name.toLowerCase().includes(searchValue.toLowerCase()) || searchValue == '') {
+                                if (user.name.toLowerCase().includes(searchValue.toLowerCase()) && userData) {
                                     return <UserRow
                                         key={user.id}
                                         id={user.id}
                                         name={user.name}
                                         role={user.role}
                                         setUpdateUserID={(value: string) => setUpdateUserID(value)}
+                                        setUpdateUserRole={(value: string) => setUpdateUserRole(value)}
                                         showEditModal={handleOpenUpdateUser}
+                                        userRole={userData.role}
                                     />
                                 }
                             }
@@ -113,7 +109,12 @@ const AdminPage = () => {
                     </Stack>
                 </div>
                 <AddUser openModal={openAddUserModal} closeCallback={handleCloseAddUserModal} />
-                <UpdateUser id={updateUserID} openModal={openUpdateUser} closeCallback={handleCloseUpdateUser} />
+                <UpdateUser
+                    id={updateUserID}
+                    openModal={openUpdateUser}
+                    closeCallback={handleCloseUpdateUser}
+                    userRole={updateUserRole}
+                />
             </div>
         );
     } else {

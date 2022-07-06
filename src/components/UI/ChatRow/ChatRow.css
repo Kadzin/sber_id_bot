@@ -1,4 +1,4 @@
-.container {
+.chat-row-container {
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -14,20 +14,20 @@
     border-radius: 4px;
     color: rgba(0, 0, 0, 0.87);
 }
-.container > .left_content {
+.chat-row-container > .left_content {
     position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 
-    width: 90%;
+    width: 60%;
 }
-.container > .left_content > .user_cell {
+.chat-row-container > .left_content > .user_cell {
     font-family: Arial;
     font-size: 1em;
     color: #303844;
     text-align: center;
 
     margin: 0 25px;
-    width: 30%;
+    width: 50%;
 }

@@ -20,6 +20,7 @@ import {IGroups} from "../../models/IGroups";
 import TransferList from "../../components/UI/TransferList/TransferList";
 import Button from "../../components/UI/Button/Button";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ChatsSection from "../../components/UI/ChatSection/ChatsSection";
 
 const GroupsPage = () => {
 
@@ -31,11 +32,13 @@ const GroupsPage = () => {
         theme: "",
         chats: [{
             id: "",
-            name: ""
+            name: "",
+            role: ""
         }],
         otherChats: [{
             id: "",
-            name: ""
+            name: "",
+            role: ""
         }]
     })
     const [leftChats, setLeftChats] = useState<string[]>([""])
@@ -258,50 +261,32 @@ const GroupsPage = () => {
             </div>
             <p className="title">Список подключенных чатов:</p>
             <div className="box">
-                <TableContainer component={Paper} sx={{ maxWidth: 600, width: "auto" }}>
-                    <Table stickyHeader sx={{ maxWidth: 600, width: "auto" }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell>Название чата</StyledTableCell>
-                                <StyledTableCell>ID Чата</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {groups && groups[0].chats.map((chat) => (
-                                <StyledTableRow
-                                    key={chat.id}
-                                    sx={{ '&:last-child th': { border: 0 } }}
-                                >
-                                    <StyledTableCellLeft>{chat.name}</StyledTableCellLeft>
-                                    <StyledTableCell>{chat.id}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box sx={{ ...style}}>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center'
+                {groups && <ChatsSection chats={groups[0].chats} />}
+            </div>
+            {/*————————————————————————————————————————————————————*/}
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+            >
+                <Box sx={{ ...style}}>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center'
+                    }}>
+                        <Typography gutterBottom component="div" textAlign="center" sx={{
+                            color: "#000000",
+                            fontSize: "1.4rem",
+                            margin: "15px",
+                            marginRight: "8px"
                         }}>
-                            <Typography gutterBottom component="div" textAlign="center" sx={{
-                                color: "#000000",
-                                fontSize: "1.4rem",
-                                margin: "15px",
-                                marginRight: "8px"
-                            }}>
-                                {popupGroup.name}
-                            </Typography>
-                            {popupGroup.id != '10000001' &&
-                                <IconButton onClick={() => removeGroup(popupGroup.id)}>
+                            {popupGroup.name}
+                        </Typography>
+                        {popupGroup.id != '10000001' &&
+                            <IconButton onClick={() => removeGroup(popupGroup.id)}>
                                 <DeleteForeverIcon sx={{
                                     color: "#d01515",
                                     fontSize: "28px",
@@ -309,64 +294,64 @@ const GroupsPage = () => {
                                 }}/>
                             </IconButton>
 
-                            }
-                        </div>
-                        <TransferList groups={popupGroup} update={updateLeftChats} />
-                        <Button disabled={false} align="center" theme="button_theme_green" value="Сохранить" style={{
-                            marginTop: "20px",
-                            marginBottom: "10px"
-                        }} onClick={updateGroupInfo} />
-                    </Box>
-                </Modal>
-                {/*————————————————————————————————————————————————————*/}
-                <Modal
-                    open={openAddGroup}
-                    onClose={handleCloseAddGroup}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box sx={{ ...style}}>
-                        <Typography gutterBottom component="div" textAlign="center" sx={{
-                            color: "#000000",
-                            fontSize: "24px",
-                            margin: "15px"
-                        }}>
-                            Напишите название новой группы
-                        </Typography>
-                        <Box sx={{
-                            width: "100%;",
-                            display: "flex",
-                            justifyContent: "center",
-                            margin: "25px 0"
-                        }}>
-                            <TextField
-                                required
-                                error={newGroupNameError}
-                                id="standard-required"
-                                label="Не более 40 символов"
-                                defaultValue=""
-                                placeholder="New group"
-                                variant="standard"
-                                sx={{
-                                    width: "400px"
-                                }}
-                                onChange={(e) => checkNewGroupName(e.target.value)}
-                            />
-                        </Box>
-                        <Button
-                            disabled={false}
-                            align="center"
-                            theme="button_theme_green"
-                            value="Создать"
-                            style={{
-                                marginTop: "20px",
-                                marginBottom: "10px"
+                        }
+                    </div>
+                    <TransferList groups={popupGroup} update={updateLeftChats} />
+                    <Button disabled={false} align="center" theme="button_theme_green" value="Сохранить" style={{
+                        marginTop: "20px",
+                        marginBottom: "10px"
+                    }} onClick={updateGroupInfo} />
+                </Box>
+            </Modal>
+            {/*————————————————————————————————————————————————————*/}
+            <Modal
+                open={openAddGroup}
+                onClose={handleCloseAddGroup}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+            >
+                <Box sx={{ ...style}}>
+                    <Typography gutterBottom component="div" textAlign="center" sx={{
+                        color: "#000000",
+                        fontSize: "24px",
+                        margin: "15px"
+                    }}>
+                        Напишите название новой группы
+                    </Typography>
+                    <Box sx={{
+                        width: "100%;",
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "25px 0"
+                    }}>
+                        <TextField
+                            required
+                            error={newGroupNameError}
+                            id="standard-required"
+                            label="Не более 40 символов"
+                            defaultValue=""
+                            placeholder="New group"
+                            variant="standard"
+                            sx={{
+                                width: "400px"
                             }}
-                            onClick={createGroup}
+                            onChange={(e) => checkNewGroupName(e.target.value)}
                         />
                     </Box>
-                </Modal>
-            </div>
+                    <Button
+                        disabled={false}
+                        align="center"
+                        theme="button_theme_green"
+                        value="Создать"
+                        style={{
+                            marginTop: "20px",
+                            marginBottom: "10px"
+                        }}
+                        onClick={createGroup}
+                    />
+                </Box>
+            </Modal>
+            {/*————————————————————————————————————————————————————*/}
             <Snackbar
                 open={alertSuccess}
                 autoHideDuration={1000}

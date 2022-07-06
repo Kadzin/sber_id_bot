@@ -43,6 +43,7 @@ interface ExpandableCardProps {
         message_id: string,
         pinned: string
     }[],
+    author: string,
     updateMessageCallback: any,
     deleteMessageCallback: any,
     deleteChatMessageCallback: any,
@@ -141,13 +142,16 @@ const ExpandableCard:FC <ExpandableCardProps> = (props) => {
                 </div>
                 <CardContent>
                     <Typography>
-                        ID: {props.id}
+                        <b>ID:</b> {props.id}
                     </Typography>
                     <Typography>
-                        Группа: {props.groupName}
+                        <b>Отправитель:</b> {props.author}
                     </Typography>
                     <Typography>
-                        Дата отправки: {props.date}
+                        <b>Группа:</b> {props.groupName}
+                    </Typography>
+                    <Typography>
+                        <b>Дата отправки:</b> {props.date}
                     </Typography>
                 </CardContent>
             </div>

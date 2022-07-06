@@ -1,5 +1,6 @@
 export interface IUpdateUser {
     action: string,
     id: string,
-    name: string
+    name: string,
+    role: string
 }

@@ -1,0 +1,10 @@
+.chats-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 25px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: rgb(250, 250, 252);
+    border-radius: 10px;
+}

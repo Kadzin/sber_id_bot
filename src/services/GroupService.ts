@@ -33,7 +33,8 @@ export const groupsAPI = createApi({
         auth: build.query<IAuth, ''>({
             query: () => ({
                 url: 'auth.php'
-            })
+            }),
+            providesTags: result => ['User']
         }),
         fetchUsers: build.query<IUsers[], ''>({
             query: () => ({
@@ -206,10 +207,22 @@ export const groupsAPI = createApi({
                 body: {
                     action: params.action,
                     id: params.id,
-                    name: params.name
+                    name: params.name,
+                    role: params.role
                 }
             }),
             invalidatesTags: result => ['User']
+        }),
+        updateChat: build.mutation<IGroupsUpdateResponse, {chat_id: string, chat_role: string}>({
+            query: (params) => ({
+                url: 'updateChat.php',
+                method: 'POST',
+                body: {
+                    chat_id: params.chat_id,
+                    chat_role: params.chat_role
+                }
+            }),
+            invalidatesTags: result => ['Group']
         })
     })
 })

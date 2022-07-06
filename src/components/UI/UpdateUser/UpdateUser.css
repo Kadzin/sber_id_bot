@@ -1,7 +1,7 @@
 .content-container {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: baseline;
 }
 .content-container-description {
     margin: 0;
@@ -12,4 +12,14 @@
     font-family: Arial;
     font-size: 16px;
     color: #303844;
+}
+.content-container > .half-width-cell {
+    position: relative;
+    width: 50%;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -5,8 +5,8 @@ import {
     Backdrop,
     Chip,
     CircularProgress,
-    Divider,
-    MenuItem,
+    Divider, FormControl, FormControlLabel, FormLabel,
+    MenuItem, Radio, RadioGroup,
     Snackbar,
     TextField
 } from "@mui/material";
@@ -19,6 +19,7 @@ import {groupsAPI} from "../../../services/GroupService";
 
 interface modalProps {
     id: string,
+    userRole: string,
     openModal: boolean,
     closeCallback: any
 }
@@ -72,6 +73,12 @@ const UpdateUser:FC<modalProps> = (props) => {
         }
     }
 
+    const changeUserRole = () => {
+        if(window.confirm('Вы уверены, что хотите изменить права пользователя? Если вы поменяете для себя, то не сможете вернуться в этот раздел!')) {
+            updateUser('role')
+        }
+    }
+
     const resetPass = () => {
         if(window.confirm('Вы уверены, что хотите сбросить пароль пользователя? Это действие невозможно отменить')) {
             updateUser('pass')
@@ -84,7 +91,8 @@ const UpdateUser:FC<modalProps> = (props) => {
         await updateUserAPI({
             action: action,
             id: props.id,
-            name: nameValue
+            name: nameValue,
+            role: radioButtonsValue
         })
     }
     useEffect(() => {
@@ -107,6 +115,22 @@ const UpdateUser:FC<modalProps> = (props) => {
         }
     }, [updateUserIsLoading])
 
+    const [radioButtonsValue, setRadioButtonsValue] = React.useState('');
+    const [radioButtonFlag, setRadioButtonFlag] = useState(false)
+    const handleRadioButtons = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRadioButtonsValue((event.target as HTMLInputElement).value);
+    };
+    useEffect(() => {
+        setRadioButtonsValue(props.userRole)
+    }, [props.userRole])
+
+    useEffect(() => {
+        if(radioButtonFlag) {
+            setRadioButtonFlag(false)
+            changeUserRole()
+        }
+    }, [radioButtonsValue])
+
     return (
         <>
             <Modal
@@ -125,22 +149,46 @@ const UpdateUser:FC<modalProps> = (props) => {
                     </Typography>
                     <Divider sx={{ margin: "0 0 25px 0" }} />
                     <p className='content-container-description'>
-                        Вы можете изменить имя пользователя, а также сбросить пароль (пользователя при это разлогинит из сервиса и необходимо будет заново активировать аккаунт в телеграме)
+                        Вы можете изменить имя пользователя, права доступа, а также сбросить пароль (пользователя при это разлогинит из сервиса и необходимо будет заново активировать аккаунт в телеграме)
                     </p>
                     <Divider sx={{ margin: "25px 0 0 0" }} />
                     <div className='content-container'>
-                        <TextField
-                            required
-                            error={nameErrorValue}
-                            id="user-new-name"
-                            label="Новое имя пользователя"
-                            variant="standard"
-                            placeholder="Имя Пользователя"
-                            sx={inputStyles}
-                            value={nameValue}
-                            onChange={(e) => handleNameChange(e.target.value)}
-                        />
-                        <Button disabled={false} align="flex" theme="button_theme_green" value="Изменить" onClick={checkFormData} />
+                        <div className='half-width-cell'>
+                            <TextField
+                                required
+                                error={nameErrorValue}
+                                id="user-new-name"
+                                label="Новое имя пользователя"
+                                variant="standard"
+                                placeholder="Имя Пользователя"
+                                sx={inputStyles}
+                                value={nameValue}
+                                onChange={(e) => handleNameChange(e.target.value)}
+                            />
+                        </div>
+                        <div className='half-width-cell'>
+                            <Button disabled={false} align="flex" theme="button_theme_green" value="Изменить" onClick={checkFormData} />
+                        </div>
+                    </div>
+                    <Divider>
+                        <Chip label="ИЛИ" />
+                    </Divider>
+                    <div className='content-container'>
+                        <FormControl sx={{margin: "25px"}}>
+                            <FormLabel id="new-user-rights">Права доступа</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="new-user-rights-radio-buttons"
+                                name="new-user-rights-radio-buttons-group"
+                                value={radioButtonsValue}
+                                onChange={handleRadioButtons}
+                                onClick={() => setRadioButtonFlag(true)}
+                            >
+                                <FormControlLabel value="user" control={<Radio />} label="Пользователь" />
+                                <FormControlLabel value="moderator" control={<Radio />} label="Модератор" />
+                                <FormControlLabel value="administrator" control={<Radio />} label="Администратор" />
+                            </RadioGroup>
+                        </FormControl>
                     </div>
                     <Divider>
                         <Chip label="ИЛИ" />
