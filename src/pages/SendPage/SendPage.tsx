@@ -220,7 +220,7 @@ const SendPage = () => {
     return (
         <>
             <Textarea onChange={setFromatedText} />
-            <p className="subtitle">Выберете способ отправки рассылки:</p>
+            <p className="subtitle">Выберите способ отправки рассылки:</p>
             <ToggleButtonGroup
                 color="standard"
                 value={alignment}
