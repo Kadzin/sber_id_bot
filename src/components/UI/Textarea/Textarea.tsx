@@ -14,6 +14,8 @@ import Button from "../Button/Button";
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import AddLink2Text from "./AddLink2Text/AddLink2Text";
 
 interface TextareaProps {
     onChange: any,
@@ -162,6 +164,8 @@ const Textarea:FC<TextareaProps> = (props) => {
         )
     }
 
+    const [addLinkValue, setAddLinkValue] = useState('')
+
     return (
         <>
             <div className="ta_message" style={{ width: props.width }}>
@@ -169,6 +173,7 @@ const Textarea:FC<TextareaProps> = (props) => {
                     <FormatBoldIcon onClick={onBoldClick} sx={{cursor: 'pointer'}} />
                     <FormatItalicIcon onClick={onItalicClick} sx={{cursor: 'pointer'}} />
                     <FormatUnderlinedIcon onClick={onUnderlineClick} sx={{cursor: 'pointer'}} />
+                    <AddLink2Text returnLinkFunc={setAddLinkValue} />
                     {/*<button onClick={onBoldClick}><b>B</b></button>*/}
                     {/*<button onClick={onItalicClick}><em>I</em></button>*/}
                     {/*<button onClick={onUnderlineClick}><u>U</u></button>*/}
